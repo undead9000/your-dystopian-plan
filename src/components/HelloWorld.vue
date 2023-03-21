@@ -1,44 +1,40 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useCounterStore } from "../store/counter";
+import { Colony, useColonyStore } from "../store/colonyStore"
+import { computed, ref } from "vue";
 defineProps<{ msg: string }>();
 
-const { count } = storeToRefs(useCounterStore());
+//const { count } = storeToRefs(useCounterStore());
+
+const currentYear = ref(0)
+currentYear.value = 2258
+const singleColonyStore = useColonyStore()
+singleColonyStore.getColony(0, currentYear.value)
+const colony = computed<Colony | null>(() => singleColonyStore.state.colony)
+
+//АНУС ФОРМИРОВАНУС 1.45 НОЧИ БЛЕАТЬ
+const questTitles = []
+
+colony.value.quests?.forEach(element => questTitles.push(element.title))
+
+function nextYear() {
+  currentYear.value++
+  singleColonyStore.getColony(0, currentYear.value)
+  console.log(questTitles)
+}
+
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
-
-  <p>
-    Recommended IDE setup:
-    <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
-    +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-  </p>
-
-  <p>See <code>README.md</code> for more information.</p>
-
-  <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank"> Vite Docs </a>
-    |
-    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
-  </p>
-
-  <button type="button" @click="count++">count is: {{ count }}</button>
-  <p>
-    Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
-  </p>
-  <p>
-    <!-- use the router-link component for navigation. -->
-    <!-- specify the link by passing the `to` prop. -->
-    <!-- `<router-link>` will render an `<a>` tag with the correct `href` attribute -->
-    <router-link to="/home" class="routerlink">Go to Home</router-link>
-    <router-link to="/about" class="routerlink">Go to About</router-link>
-  </p>
-  <!-- route outlet -->
-  <!-- component matched by the route will render here -->
+  <p>Colony Id: {{ colony?.colonyId }}</p>
+  <p>Colony current year: {{ colony?.currentYear }}</p>
+  <p>Colony realted quests: {{ questTitles }}</p>
+  <button
+    @click="nextYear"
+  >
+    Next
+  </button>
   <router-view />
 </template>
 
