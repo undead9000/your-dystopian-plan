@@ -3,6 +3,7 @@ import { storeToRefs } from "pinia";
 import { useCounterStore } from "../store/counter";
 import { Colony, useColonyStore } from "../store/colonyStore"
 import { computed, ref } from "vue";
+import Dialog from "./Dialog.vue"
 defineProps<{ msg: string }>();
 
 //const { count } = storeToRefs(useCounterStore());
@@ -24,37 +25,89 @@ function nextYear() {
   console.log(questTitles)
 }
 
+const showDialog = ref(false)
+function toggleDialog() {
+  showDialog.value = !showDialog.value
+}
+
+const testDialogArray = [
+  {
+    "step": 0,
+    "id": 0,
+    "text": "Choose one variant below",
+    "variants": [
+      {
+        "buttonName": "Variant 1",
+        "nextId": 10,
+      },
+      {
+        "buttonName": "Variant 2",
+        "nextId": 20,
+      }
+    ]
+  },
+  {
+    "step": 1,
+    "id": 10,
+    "text": "Chosen One",
+  },
+  {
+    "step": 1,
+    "id": 20,
+    "text": "Not chosen One, chosen two",
+  }
+]
 </script>
 
 <template>
-  <p>Colony Id: {{ colony?.colonyId }}</p>
-  <p>Colony current year: {{ colony?.currentYear }}</p>
-  <p>Colony realted quests: {{ questTitles }}</p>
-  <button
-    @click="nextYear"
-  >
-    Next
-  </button>
+  <div class="wrapper">
+    <p>Colony Id: {{ colony?.colonyId }}</p>
+    <p>Colony current year: {{ colony?.currentYear }}</p>
+    <p>Colony realted quests: {{ questTitles }}</p>
+    <button @click="nextYear">Next</button>
+    <br />
+    <button @click="toggleDialog">Show dialog</button>
+      <Dialog 
+        :show="showDialog"
+        :dialog="testDialogArray"
+        @toggleDialog="toggleDialog"
+      />
+  </div>
+  
   <router-view />
 </template>
 
-<style scoped>
-a {
-  color: #42b983;
-}
+<style scoped lang="scss">
+  .wrapper {
+    position: relative;
+    height: 100%;
+  }
 
-label {
-  margin: 0 0.5em;
-  font-weight: bold;
-}
+  .wrapper-overlay {
+    height: 100%;
+  
+    &::before {
+      content: '';
 
-code {
-  background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #304455;
-}
-.routerlink {
-  margin: 0 10px;
-}
+    }
+  }
+
+  a {
+    color: #42b983;
+  }
+
+  label {
+    margin: 0 0.5em;
+    font-weight: bold;
+  }
+
+  code {
+    background-color: #eee;
+    padding: 2px 4px;
+    border-radius: 4px;
+    color: #304455;
+  }
+  .routerlink {
+    margin: 0 10px;
+  }
 </style>
