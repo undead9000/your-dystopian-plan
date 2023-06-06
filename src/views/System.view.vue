@@ -1,0 +1,3 @@
+<template>
+    System part
+</template>
