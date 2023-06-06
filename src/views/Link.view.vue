@@ -1,0 +1,3 @@
+<template>
+    Link part
+</template>

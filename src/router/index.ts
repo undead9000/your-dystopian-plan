@@ -1,17 +1,41 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Home from "../components/Home.vue";
-import About from "../components/About.vue";
+import Calendar from "../views/Calendar.view.vue"
+import Characters from "../views/Characters.view.vue"
+import Colony from "../views/Colony.view.vue";
+import Hero from "../views/Hero.view.vue";
+import Link from "../views/Link.view.vue";
+import System from "../views/System.view.vue";
 
 const routes = [
     {
-        path: "/home",
-        name: "Home",
-        component: Home,
+        path: "/",
+        name: "Colony",
+        component: Colony,
     },
     {
-        path: "/about",
-        name: "About",
-        component: About,
+        path: "/calendar",
+        name: "Calendar",
+        component: Calendar,
+    },
+    {
+        path: "/characters",
+        name: "Characters",
+        component: Characters,
+    },
+    {
+        path: "/hero",
+        name: "Hero",
+        component: Hero,
+    },
+    {
+        path: "/link",
+        name: "Link",
+        component: Link,
+    },
+    {
+        path: "/system",
+        name: "System",
+        component: System,
     },
 ];
 

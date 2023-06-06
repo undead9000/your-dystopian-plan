@@ -1,0 +1,3 @@
+<template>
+    Characters part
+</template>
