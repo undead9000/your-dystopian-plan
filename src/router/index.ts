@@ -5,17 +5,23 @@ import Colony from "../views/Colony.view.vue";
 import Hero from "../views/Hero.view.vue";
 import Link from "../views/link/Link.view.vue";
 import System from "../views/System.view.vue";
-
+import InGameMenu from "../views/InGameMenu.view.vue";
+import MainMenu from "../views/MainMenu.view.vue"
 const routes = [
     {
         path: "/",
-        name: "Colony",
-        component: Colony,
+        name: "Main Menu",
+        component: MainMenu,
     },
     {
         path: "/calendar",
         name: "Calendar",
         component: Calendar,
+    },
+    {
+        path: "/colony",
+        name: "Colony",
+        component: Colony,
     },
     {
         path: "/characters",
@@ -37,6 +43,11 @@ const routes = [
         name: "System",
         component: System,
     },
+    {
+        path:"/game",
+        name:"Game",
+        component: InGameMenu
+    }
 ];
 
 const router = createRouter({
