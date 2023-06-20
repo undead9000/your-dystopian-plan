@@ -14,45 +14,47 @@ const routes = [
         component: MainMenu,
     },
     {
-        path: "/calendar",
-        name: "Calendar",
-        component: Calendar,
-    },
-    {
-        path: "/colony",
-        name: "Colony",
-        component: Colony,
-    },
-    {
-        path: "/characters",
-        name: "Characters",
-        component: Characters,
-    },
-    {
-        path: "/hero",
-        name: "Hero",
-        component: Hero,
-    },
-    {
-        path: "/link",
-        name: "Link",
-        component: Link,
-    },
-    {
-        path: "/system",
-        name: "System",
-        component: System,
-    },
-    {
         path:"/game",
         name:"Game",
-        component: InGameMenu
+        component: InGameMenu,
+        children:[
+            {
+                path: "calendar",
+                name: "Calendar",
+                component: Calendar,
+            },
+            {
+                path: "colony",
+                name: "Colony",
+                component: Colony,
+            },
+            {
+                path: "characters",
+                name: "Characters",
+                component: Characters,
+            },
+            {
+                path: "hero",
+                name: "Hero",
+                component: Hero,
+            },
+            {
+                path: "link",
+                name: "Link",
+                component: Link,
+            },
+            {
+                path: "system",
+                name: "System",
+                component: System,
+            }
+        ]
     }
 ];
 
 const router = createRouter({
     history: createWebHistory(),
-    routes,
+    routes
 });
 
 export default router;

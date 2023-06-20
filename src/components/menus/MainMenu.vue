@@ -14,5 +14,5 @@
 </template>
 
 <script setup lang="ts">
-import Menu from './InGameMenu.vue'
+
 </script>

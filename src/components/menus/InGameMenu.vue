@@ -1,10 +1,15 @@
 <template>
+  <div class="panel panel-left">
     <ul>
-        <li><router-link to="/calendar">Calendar</router-link></li>
-        <li><router-link to="/characters">Characters</router-link></li>
-        <li><router-link to="/colony">Colony</router-link></li>
-        <li><router-link to="/hero">Hero</router-link></li>
-        <li><router-link to="/link">Link</router-link></li>
-        <li><router-link to="/system">System</router-link></li>
+        <router-link class="button" :to="{name:'Calendar'}">Calendar</router-link>
+        <router-link class="button" :to="{name:'Characters'}">Characters</router-link>
+        <router-link class="button" :to="{name:'Colony'}">Colony</router-link>
+        <router-link class="button" :to="{name:'Hero'}">Hero</router-link>
+        <router-link class="button" :to="{name:'Link'}">Link</router-link>
+        <router-link class="button" :to="{name:'System'}">System</router-link>
     </ul>
+  </div>
+  <div class="panel panel-right">
+    <router-view></router-view>
+  </div>
 </template>
