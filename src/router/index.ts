@@ -5,56 +5,43 @@ import Colony from "../views/Colony.view.vue";
 import Hero from "../views/Hero.view.vue";
 import Link from "../views/Link.view.vue";
 import System from "../views/System.view.vue";
-import InGameMenu from "../views/InGameMenu.view.vue";
-import MainMenu from "../views/MainMenu.view.vue"
+
 const routes = [
     {
         path: "/",
-        name: "Main Menu",
-        component: MainMenu,
+        name: "Colony",
+        component: Colony,
     },
     {
-        path:"/game",
-        name:"Game",
-        component: InGameMenu,
-        children:[
-            {
-                path: "calendar",
-                name: "Calendar",
-                component: Calendar,
-            },
-            {
-                path: "colony",
-                name: "Colony",
-                component: Colony,
-            },
-            {
-                path: "characters",
-                name: "Characters",
-                component: Characters,
-            },
-            {
-                path: "hero",
-                name: "Hero",
-                component: Hero,
-            },
-            {
-                path: "link",
-                name: "Link",
-                component: Link,
-            },
-            {
-                path: "system",
-                name: "System",
-                component: System,
-            }
-        ]
-    }
+        path: "/calendar",
+        name: "Calendar",
+        component: Calendar,
+    },
+    {
+        path: "/characters",
+        name: "Characters",
+        component: Characters,
+    },
+    {
+        path: "/hero",
+        name: "Hero",
+        component: Hero,
+    },
+    {
+        path: "/link",
+        name: "Link",
+        component: Link,
+    },
+    {
+        path: "/system",
+        name: "System",
+        component: System,
+    },
 ];
 
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes,
 });
 
 export default router;
