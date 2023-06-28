@@ -1,3 +1,0 @@
-<template>
-    Link part
-</template>
