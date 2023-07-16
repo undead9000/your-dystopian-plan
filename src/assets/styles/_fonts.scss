@@ -1,0 +1,17 @@
+@font-face {
+  font-family: Fira Mono;
+  src: local(Fira Mono), url('../fonts/FiraMono-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Fira Mono;
+  src: local(Fira Mono), url('../fonts/FiraMono-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Fira Mono;
+  src: local(Fira Mono), url('../fonts/FiraMono-Regular.ttf') format('truetype');
+  font-weight: normal;
+}

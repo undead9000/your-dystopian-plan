@@ -1,8 +1,17 @@
 <template>
     Characters
-    <ul>
-        <li>Nate Higgers</li>
-        <li>Nuck Figgers</li>
-        <li>Nill Kiggers</li>
+    <ul v-if="charactersNames.length">
+        <li v-for="name in charactersNames">{{ name }}</li>
     </ul>
 </template>
+
+<script setup lang="ts">
+import { computed } from "vue";
+import { Colony, useColonyStore } from "../store/colonyStore"
+
+const singleColonyStore = useColonyStore()
+const colony = computed<Colony | null>(() => singleColonyStore.state.colony)
+
+const charactersNames = []
+colony.value?.characters.forEach(character => charactersNames.push(character.name))
+</script>

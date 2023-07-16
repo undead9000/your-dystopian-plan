@@ -21,7 +21,7 @@ export class Player {
   }
 }
 
-export const useSinglePostStore = defineStore('SinglePost', () => {
+export const usePlayerStore = defineStore('playerStore', () => {
   
 
   return {

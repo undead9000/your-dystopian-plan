@@ -12,9 +12,7 @@
       <p>Colony Id: {{ colony?.colonyId }}</p>
       <p>Colony current year: {{ colony?.currentYear }}</p>
       <p>Colony realted quests: {{ questTitles }}</p>
-      <button @click="nextYear">
-        Next
-      </button>
+      <p>Colony realted characters: {{ charactersNames }}</p>
     </template>
     <template v-if="currentLink === 2">
       <p>Fractions list</p>
@@ -30,31 +28,24 @@
 
 <script setup lang="ts">
 //import { storeToRefs } from "pinia";
-//import { useCounterStore } from "../store/counter";
 import { Colony, useColonyStore } from "../store/colonyStore"
 import { computed, ref } from "vue";
 import Fraction from "./fraction/Fraction.view.vue"
 
 const currentLink = ref(0)
-//const { count } = storeToRefs(useCounterStore());
 
 const currentYear = ref(0)
-currentYear.value = 2258
+currentYear.value = 2261
 const singleColonyStore = useColonyStore()
 singleColonyStore.getColony(0, currentYear.value)
 const colony = computed<Colony | null>(() => singleColonyStore.state.colony)
 
 //АНУС ФОРМИРОВАНУС 1.45 НОЧИ БЛЕАТЬ
 const questTitles = []
+const charactersNames = []
 
+colony.value!.characters.forEach(character => charactersNames.push(character.name))
 colony.value!.quests?.forEach(element => questTitles.push(element.title))
-
-function nextYear() {
-  currentYear.value++
-  singleColonyStore.getColony(0, currentYear.value)
-  console.log(questTitles)
-}
-
 </script>
 
 <style scoped>
