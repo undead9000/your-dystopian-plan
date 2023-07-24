@@ -8,13 +8,17 @@ export const useCharactersStore = defineStore('charactersStore', () => {
         characters: null as Character[] | null
     })
 
-    function getRelatedCharacters() {
-        const relatedCharacters = characterData
-        return relatedCharacters
+    function getRelatedCharacters(relatedColonyId:number) {
+      return characterData.filter(characterItem => characterItem.relationColonyId === relatedColonyId)
+    }
+
+    function getAllCharacters() {
+      return characterData
     }
 
   return {
     state,
-    getRelatedCharacters
+    getRelatedCharacters,
+    getAllCharacters
   }
 })

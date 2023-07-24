@@ -9,10 +9,10 @@
     <template v-if="currentLink === 0">Science tech three</template>
     <template v-if="currentLink === 1">
       <p>Colony details</p>
-      <p>Colony Id: {{ colony?.colonyId }}</p>
-      <p>Colony current year: {{ colony?.currentYear }}</p>
-      <p>Colony realted quests: {{ questTitles }}</p>
-      <p>Colony realted characters: {{ charactersNames }}</p>
+      <p>Colony Id: {{ singleColonyStore.state.colony.colonyId }}</p>
+      <p>Colony current year: {{ singleColonyStore.state.colony.currentYear }}</p>
+      <p>Colony realted quests: {{ singleColonyStore.getRelatedQuestsNames() }}</p>
+      <p>Colony realted characters: {{ singleColonyStore.getRelatedCharactersNames() }}</p>
     </template>
     <template v-if="currentLink === 2">
       <p>Fractions list</p>
@@ -28,24 +28,13 @@
 
 <script setup lang="ts">
 //import { storeToRefs } from "pinia";
-import { Colony, useColonyStore } from "../store/colonyStore"
-import { computed, ref } from "vue";
+import { useColonyStore } from "../store/colonyStore"
+import { ref } from "vue";
 import Fraction from "./fraction/Fraction.view.vue"
 
 const currentLink = ref(0)
-
-const currentYear = ref(0)
-currentYear.value = 2261
 const singleColonyStore = useColonyStore()
-singleColonyStore.getColony(0, currentYear.value)
-const colony = computed<Colony | null>(() => singleColonyStore.state.colony)
 
-//АНУС ФОРМИРОВАНУС 1.45 НОЧИ БЛЕАТЬ
-const questTitles = []
-const charactersNames = []
-
-colony.value!.characters.forEach(character => charactersNames.push(character.name))
-colony.value!.quests?.forEach(element => questTitles.push(element.title))
 </script>
 
 <style scoped>
