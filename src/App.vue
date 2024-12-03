@@ -9,14 +9,21 @@ import Menu from './components/InGameMenu.vue'
 //import Colony from "./views/Colony.view.vue";
 </script>
 
-<style>
+<style lang="scss">
+body {
+  background-color: #444;
+  color: #fff;
+}
+ul, ol {
+  list-style: none;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
+  
 }
 img {
   margin: 5px;

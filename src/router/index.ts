@@ -5,36 +5,37 @@ import Colony from "../views/Colony.view.vue";
 import Hero from "../views/Hero.view.vue";
 import Link from "../views/link/Link.view.vue";
 import System from "../views/System.view.vue";
+import { PagesLinks } from './routes'
 
 const routes = [
     {
         path: "/",
-        name: "Colony",
+        name: PagesLinks.Colony,
         component: Colony,
     },
     {
         path: "/calendar",
-        name: "Calendar",
+        name: PagesLinks.Calendar,
         component: Calendar,
     },
     {
         path: "/characters",
-        name: "Characters",
+        name: PagesLinks.Characters,
         component: Characters,
     },
     {
         path: "/hero",
-        name: "Hero",
+        name: PagesLinks.Hero,
         component: Hero,
     },
     {
         path: "/link",
-        name: "Link",
+        name: PagesLinks.Link,
         component: Link,
     },
     {
         path: "/system",
-        name: "System",
+        name: PagesLinks.System,
         component: System,
     },
 ];

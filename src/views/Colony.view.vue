@@ -1,21 +1,22 @@
 <template>
   <ul class="tabs">
-    <a class="button" @click="currentLink = 0">Science</a>
-    <a class="button" @click="currentLink = 1">Colony data</a>
-    <a class="button" @click="currentLink = 2">Fractions</a>
+    <button class="button" :class="currentLink === 0 ? 'active' : ''" @click="currentLink = 0">Science</button>
+    <button class="button" :class="currentLink === 1 ? 'active' : ''" @click="currentLink = 1">Colony data</button>
+    <button class="button" :class="currentLink === 2 ? 'active' : ''" @click="currentLink = 2">Fractions</button>
   </ul>
   <div class="link-interface">
     <!-- Диалоговая система тут -->
     <template v-if="currentLink === 0">Science tech three</template>
+
     <template v-if="currentLink === 1">
       <p>Colony details</p>
       <p>Colony Id: {{ colony?.colonyId }}</p>
       <p>Colony current year: {{ colony?.currentYear }}</p>
-      <p>Colony realted quests: {{ questTitles }}</p>
-      <button @click="nextYear">
-        Next
-      </button>
+      <p v-if="questTitles.length">Colony realted quests: {{ questTitles.toString() }}</p>
+      <p v-else>No related quests</p>
+      <button @click="nextYear">Next</button>
     </template>
+
     <template v-if="currentLink === 2">
       <p>Fractions list</p>
       <ul>
@@ -29,39 +30,28 @@
 </template>
 
 <script setup lang="ts">
-//import { storeToRefs } from "pinia";
-//import { useCounterStore } from "../store/counter";
 import { Colony, useColonyStore } from "../store/colonyStore"
 import { computed, ref } from "vue";
 import Fraction from "./fraction/Fraction.view.vue"
 
 const currentLink = ref(0)
-//const { count } = storeToRefs(useCounterStore());
-
 const currentYear = ref(0)
 currentYear.value = 2258
+
 const singleColonyStore = useColonyStore()
 singleColonyStore.getColony(0, currentYear.value)
-const colony = computed<Colony | null>(() => singleColonyStore.state.colony)
 
-//АНУС ФОРМИРОВАНУС 1.45 НОЧИ БЛЕАТЬ
-const questTitles = []
-
-colony.value!.quests?.forEach(element => questTitles.push(element.title))
+const colony = computed<Colony>(() => singleColonyStore.state.colony)
+const questTitles = computed(() => singleColonyStore.getRelatedQuests(0, currentYear.value).map(quest => quest.title))
 
 function nextYear() {
   currentYear.value++
   singleColonyStore.getColony(0, currentYear.value)
-  console.log(questTitles)
 }
 
 </script>
 
 <style scoped>
-a {
-  color: #42b983;
-}
-
 label {
   margin: 0 0.5em;
   font-weight: bold;
@@ -76,5 +66,9 @@ code {
 
 .routerlink {
   margin: 0 10px;
+}
+
+.button.active {
+  background-color: #bbb;
 }
 </style>
