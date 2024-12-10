@@ -5,8 +5,6 @@
 
 <script setup lang="ts">
 import Menu from './components/InGameMenu.vue'
-
-//import Colony from "./views/Colony.view.vue";
 </script>
 
 <style lang="scss">

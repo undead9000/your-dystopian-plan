@@ -5,16 +5,15 @@
     <button class="button" :class="currentLink === 2 ? 'active' : ''" @click="currentLink = 2">Fractions</button>
   </ul>
   <div class="link-interface">
-    <!-- Диалоговая система тут -->
     <template v-if="currentLink === 0">Science tech three</template>
 
     <template v-if="currentLink === 1">
       <p>Colony details</p>
-      <p>Colony Id: {{ colony?.colonyId }}</p>
-      <p>Colony current year: {{ colony?.currentYear }}</p>
+      <p>Colony Id: {{ singleColonyStore.state.colony?.colonyId }}</p>
+      <p>Colony current year: {{ singleColonyStore.state.colony?.currentYear }}</p>
       <p v-if="questTitles.length">Colony realted quests: {{ questTitles.toString() }}</p>
       <p v-else>No related quests</p>
-      <button @click="nextYear">Next</button>
+      <button @click="singleColonyStore.nextTurn()">Next</button>
     </template>
 
     <template v-if="currentLink === 2">
@@ -30,45 +29,11 @@
 </template>
 
 <script setup lang="ts">
-import { Colony, useColonyStore } from "../store/colonyStore"
+import { useColonyStore } from "../store/colonyStore"
 import { computed, ref } from "vue";
 import Fraction from "./fraction/Fraction.view.vue"
 
 const currentLink = ref(0)
-const currentYear = ref(0)
-currentYear.value = 2258
-
 const singleColonyStore = useColonyStore()
-singleColonyStore.getColony(0, currentYear.value)
-
-const colony = computed<Colony>(() => singleColonyStore.state.colony)
-const questTitles = computed(() => singleColonyStore.getRelatedQuests(0, currentYear.value).map(quest => quest.title))
-
-function nextYear() {
-  currentYear.value++
-  singleColonyStore.getColony(0, currentYear.value)
-}
-
+const questTitles = computed(() => singleColonyStore.getRelatedQuests().map(quest => quest.title))
 </script>
-
-<style scoped>
-label {
-  margin: 0 0.5em;
-  font-weight: bold;
-}
-
-code {
-  background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #304455;
-}
-
-.routerlink {
-  margin: 0 10px;
-}
-
-.button.active {
-  background-color: #bbb;
-}
-</style>

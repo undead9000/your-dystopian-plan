@@ -1,48 +1,46 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-//import { fetchColony } from '../api'
-import colonyData from "../assets/colonyData.json"
 import questData from "../assets/questsData.json"
+import initialColony from "../assets/initialColonyData.json"
 
 export class Colony {
   constructor(
     public colonyId: number,
     public currentYear: number,
-    public quests: Array<any>
+    public quests: Array<any> | null
   ){}
-
-  setYear(currentYear: number) {
-    this.currentYear = currentYear
-  }
-
-  setQuests(quests: Array<any>) {
-    this.quests = quests
-  }
 }
 
-export const useColonyStore = defineStore('SingleColony', () => {
+export const useColonyStore = defineStore('singleColonyStore', () => {
     const state = reactive({
         colony: null as Colony | null
     })
 
-    function getColony(colonyId: number, currentYear: number) {
-        const quests = getRelatedQuests(colonyId, currentYear)
-        updateColony(colonyId, currentYear, quests)
+    function init() {
+      state.colony = {
+        colonyId: initialColony.colonyId,
+        currentYear: initialColony.currentYear,
+        quests: initialColony.quests
+      }
     }
 
-    function getRelatedQuests(colonyId: number, currentYear: number) {
+    function nextTurn() {
+      if(!state.colony) return
+      state.colony.currentYear = state.colony.currentYear + 1
+    }
+
+    function getRelatedQuests() {
+      if(!state.colony?.currentYear) return []
+
+      const currentYear = state.colony.currentYear
       const relatedQuests = questData.filter(item => item.startYear <= currentYear && item.endYear > currentYear)
       return relatedQuests
     }
 
-    function updateColony(colonyId, currentYear, quests) {
-        state.colony = new Colony(colonyId, currentYear, quests)
-    }
-
     return {
         state,
-        getColony,
+        init,
+        nextTurn,
         getRelatedQuests,
-        updateColony
     }
 })
