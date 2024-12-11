@@ -18,6 +18,7 @@ const menu = computed(() => router.options.routes)
 <style lang="scss">
 .main-menu {
     display: flex;
+    margin: 0 0 20px;
 
     li:not(:last-child) {
         margin: 0 12px 0 0;

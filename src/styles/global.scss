@@ -1,0 +1,61 @@
+body {
+    background-color: #444;
+    color: #fff;
+}
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#app {
+    height: calc(100vh - 120px);
+    margin: 60px 0;
+    position: relative;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.common-view {
+    flex: 1 0 0;
+}
+
+.tabs {
+    margin: 0 0 20px;
+}
+
+.tabs .button {
+    border-radius: 4px;
+    margin-right: 0.3rem;
+    margin-bottom: 0;
+}
+
+.tabs .button.active {
+    background-color: #aaa;
+}
+
+.tabs .button:last-child {
+    margin: 0;
+}
+
+.end-turn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.end-turn .end-turn-button {
+    margin: 0 0 0 12px;
+}

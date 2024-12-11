@@ -1,34 +1,12 @@
 <template>
-  <Menu />
-  <RouterView />
+    <div class="app-container">
+        <Menu />
+        <RouterView class="common-view"/>
+        <EndTurn />
+    </div>
 </template>
 
 <script setup lang="ts">
 import Menu from './components/InGameMenu.vue'
+import EndTurn from './components/EndTurn.vue';
 </script>
-
-<style lang="scss">
-body {
-  background-color: #444;
-  color: #fff;
-}
-ul, ol {
-  list-style: none;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  margin-top: 60px;
-  
-}
-img {
-  margin: 5px;
-}
-.plugins {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 20px;
-}
-</style>
