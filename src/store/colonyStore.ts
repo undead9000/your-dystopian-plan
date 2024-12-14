@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import { Colony } from '../models/models'
+import { Colony, Faction, Character } from '../models/models'
 import scenarioData from "../assets/scenario.json"
 import initialColony from "../assets/initialColonyData.json"
 
@@ -13,9 +13,18 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       state.colony = {
         id: initialColony.id,
         currentYear: initialColony.currentYear,
-        quests: initialColony.quests,
-        factions: initialColony.factions
+        quests: scenarioData.questsData,
+        factions: bindCharactersToFactions(scenarioData.factionsData, scenarioData.charactersData),
+        characters: scenarioData.charactersData
       }
+    }
+
+    function bindCharactersToFactions(factions: Array<Faction>, characters: Array<Character>) {
+      const factionsWithCharacters = factions.map(faction => ({
+        ...faction,
+        members: characters.filter(character => character.factionIds === faction.id) ?? null
+      }))
+      return factionsWithCharacters
     }
 
     function nextTurn() {
@@ -24,20 +33,24 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
     }
 
     function getRelatedQuests() {
-      if(!state.colony?.currentYear) return []
+      if(!state.colony?.quests) return []
 
       const currentYear = state.colony.currentYear
-      const relatedQuests = scenarioData.questData.filter(item => item.startYear <= currentYear && item.endYear > currentYear)
+      const relatedQuests = state.colony.quests.filter(item => item.startYear <= currentYear && item.endYear > currentYear)
       return relatedQuests
     }
 
     function getActiveFactions() {
-      const activeFactions = scenarioData.factionsData.filter(item => item.active)
+      if(!state.colony?.factions) return null
+
+      const activeFactions = state.colony.factions.filter(item => item.active)
       return activeFactions
     }
 
-    function getFactionDetails(id: string) {
-      const factionDetails = scenarioData.factionsData.find(faction => faction.id === id) ?? null
+    function getFactionDetails(factionId: string) {
+      if(!state.colony?.factions) return null
+
+      const factionDetails = state.colony.factions.find(faction => faction.id === factionId) ?? null
       return factionDetails
     }
 

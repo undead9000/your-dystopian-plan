@@ -14,7 +14,12 @@
                 <p>
                     <span>Faction motto: </span> <span>"{{ currentFaction.description }}"</span>
                 </p>
-                
+                <p>
+                    <span>Faction members: </span> 
+                    <ul class="factions-members">
+                        <li v-for="member in currentFaction.members">{{ member.name }}</li>
+                    </ul>
+                </p>
             </template>
             <template v-else>
                 <p>No faction selected</p>
@@ -48,6 +53,10 @@ function showFactionDetails(id: string) {
     border: 1px solid #aaa;
     padding: 24px 36px;
     width: 100%;
-    max-width: 240px;
+    max-width: 320px;
+}
+.factions-members {
+    list-style: circle;
+    padding: 0 0 0 16px;
 }
 </style>

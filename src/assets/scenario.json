@@ -1,5 +1,5 @@
 {
-    "questData": [
+    "questsData": [
         {
             "id": "0",
             "startYear": 2258,
@@ -24,6 +24,7 @@
             "id": "0",
             "factionName": "Agrarian faction",
             "description": "Leave us alone",
+            "political": false,
             "active": false,
             "members": null
         },
@@ -31,6 +32,7 @@
             "id": "1",
             "factionName": "Progressive faction",
             "description": "Science or death",
+            "political": true,
             "active": true,
             "members": null
         },
@@ -38,6 +40,7 @@
             "id": "2",
             "factionName": "Business faction",
             "description": "Do money, that's all",
+            "political": true,
             "active": true,
             "members": null
         },
@@ -45,8 +48,59 @@
             "id": "3",
             "factionName": "Workers faction",
             "description": "Time to strike",
+            "political": true,
             "active": true,
             "members": null
+        }
+    ],
+    "charactersData": [
+        {
+            "id": "0",
+            "name": "Willard Medina",
+            "alive": true,
+            "factionIds": null
+        },
+        {
+            "id": "1",
+            "name": "Dale Hobbs",
+            "alive": true,
+            "factionIds": "0"
+        },
+        {
+            "id": "2",
+            "name": "Zaynab Hess",
+            "alive": true,
+            "factionIds": "1"
+        },
+        {
+            "id": "3",
+            "name": "Everett Brady",
+            "alive": true,
+            "factionIds": "2"
+        },
+        {
+            "id": "4",
+            "name": "Kelsey Gould",
+            "alive": true,
+            "factionIds": "2"
+        },
+        {
+            "id": "5",
+            "name": "Ruth Fleming",
+            "alive": true,
+            "factionIds": "3"
+        },
+        {
+            "id": "6",
+            "name": "Johnathan French",
+            "alive": true,
+            "factionIds": "3"
+        },
+        {
+            "id": "7",
+            "name": "Luda Cannon",
+            "alive": true,
+            "factionIds": "3"
         }
     ]
 }
