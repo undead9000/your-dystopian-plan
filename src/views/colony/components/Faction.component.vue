@@ -1,28 +1,29 @@
 <template>
-    <h3>Factions list</h3>
+    <h3>{{ t('titles.factionsList') }}</h3>
     <div class="factions-main">
-        <ul class="factions-list">
+        <ul v-if="factions?.length" class="factions-list">
             <li v-for="faction in factions">
                 <a href="/" @click.prevent="showFactionDetails(faction.id)">{{ faction.factionName }}</a>
             </li>
         </ul>
-        <div class="factions-details">
+        <p v-else>{{ t('noFactions') }}</p>
+        <div v-if="factions?.length" class="factions-details">
             <template v-if="currentFaction">
                 <p>
-                    <span>Faction name: </span> <span>{{ currentFaction.factionName }}</span>
+                    <span>{{ t('faction.factionName') }}: </span> <span>{{ currentFaction.factionName }}</span>
                 </p>
                 <p>
-                    <span>Faction motto: </span> <span>"{{ currentFaction.description }}"</span>
+                    <span>{{ t('faction.factionMotto') }}: </span> <span>"{{ currentFaction.description }}"</span>
                 </p>
                 <p>
-                    <span>Faction members: </span> 
+                    <span>{{ t('faction.factionMembers') }}: </span> 
                     <ul class="factions-members">
                         <li v-for="member in currentFaction.members">{{ member.name }}</li>
                     </ul>
                 </p>
             </template>
             <template v-else>
-                <p>No faction selected</p>
+                <span>{{ t('noFactionSelected') }}</span>
             </template>
         </div>
     </div>
@@ -30,10 +31,13 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from 'vue-i18n'
 import { useColonyStore } from "../../../store/colonyStore"
 import { Faction } from '../../../models/models'
 
 const singleColonyStore = useColonyStore()
+const { t } = useI18n()
+
 const factions = computed(() => singleColonyStore.getActiveFactions())
 const currentFaction = ref<Faction | null>(null)
 

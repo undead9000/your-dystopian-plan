@@ -1,7 +1,7 @@
 <template>
     <ul v-if="menu.length" class="main-menu">
         <li v-for="item in menu">
-            <router-link :to="{name: item.name}">{{ item.name }}</router-link>
+            <router-link :to="{name: item.name}">{{ item.title }}</router-link>
         </li>
     </ul>
 </template>
@@ -9,10 +9,14 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { computed } from "vue";
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
-
-const menu = computed(() => router.options.routes)
+const { t } = useI18n()
+const menu = computed(() => router.options.routes.map(route => ({
+    ...route,
+    title: t('titles.' + route.name.toLowerCase())
+})))
 </script>
 
 <style lang="scss">

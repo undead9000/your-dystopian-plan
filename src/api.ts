@@ -8,6 +8,4 @@ function fetchColony(colonyId: number) {
   
 }
 
-
-
 export { fetchColony }
