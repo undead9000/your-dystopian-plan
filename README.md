@@ -266,3 +266,7 @@ npm run app:build
 ## Update
 
 ### 2022/08/16: add `pinia`:pineapple: and `vue-router`
+
+## About this project
+
+### Simple engine for text RPG

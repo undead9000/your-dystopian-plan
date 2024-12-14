@@ -6,7 +6,7 @@
           <button class="button" :class="currentLink === 2 ? 'active' : ''" @click="currentLink = 2">Black link</button>
       </ul>
       <div class="link-interface">
-          <!-- Диалоговая система тут -->
+          <!-- Dialogue system here -->
           <template v-if="currentLink === 0">Calling Earth...</template>
           <template v-if="currentLink === 1">Calling capital...</template>
           <template v-if="currentLink === 2">Calling connect...</template>

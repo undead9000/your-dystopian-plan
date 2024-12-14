@@ -1,15 +1,8 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import questData from "../assets/questsData.json"
+import { Colony } from '../models/models'
+import scenarioData from "../assets/scenario.json"
 import initialColony from "../assets/initialColonyData.json"
-
-export class Colony {
-  constructor(
-    public colonyId: number,
-    public currentYear: number,
-    public quests: Array<any> | null
-  ){}
-}
 
 export const useColonyStore = defineStore('singleColonyStore', () => {
     const state = reactive({
@@ -18,9 +11,10 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
 
     function init() {
       state.colony = {
-        colonyId: initialColony.colonyId,
+        id: initialColony.id,
         currentYear: initialColony.currentYear,
-        quests: initialColony.quests
+        quests: initialColony.quests,
+        factions: initialColony.factions
       }
     }
 
@@ -33,8 +27,18 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       if(!state.colony?.currentYear) return []
 
       const currentYear = state.colony.currentYear
-      const relatedQuests = questData.filter(item => item.startYear <= currentYear && item.endYear > currentYear)
+      const relatedQuests = scenarioData.questData.filter(item => item.startYear <= currentYear && item.endYear > currentYear)
       return relatedQuests
+    }
+
+    function getActiveFactions() {
+      const activeFactions = scenarioData.factionsData.filter(item => item.active)
+      return activeFactions
+    }
+
+    function getFactionDetails(id: string) {
+      const factionDetails = scenarioData.factionsData.find(faction => faction.id === id) ?? null
+      return factionDetails
     }
 
     return {
@@ -42,5 +46,7 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         init,
         nextTurn,
         getRelatedQuests,
+        getActiveFactions,
+        getFactionDetails
     }
 })

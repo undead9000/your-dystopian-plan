@@ -1,0 +1,52 @@
+{
+    "questData": [
+        {
+            "id": "0",
+            "startYear": 2258,
+            "endYear": 2260,
+            "title": "Quest 1"
+        },
+        {
+            "id": "1",
+            "startYear": 2258,
+            "endYear": 2265,
+            "title": "Quest 2"
+        },
+        {
+            "id": "2",
+            "startYear": 2261,
+            "endYear": 2270,
+            "title": "Quest 3"
+        }
+    ],
+    "factionsData": [
+        {
+            "id": "0",
+            "factionName": "Agrarian faction",
+            "description": "Leave us alone",
+            "active": false,
+            "members": null
+        },
+        {
+            "id": "1",
+            "factionName": "Progressive faction",
+            "description": "Science or death",
+            "active": true,
+            "members": null
+        },
+        {
+            "id": "2",
+            "factionName": "Business faction",
+            "description": "Do money, that's all",
+            "active": true,
+            "members": null
+        },
+        {
+            "id": "3",
+            "factionName": "Workers faction",
+            "description": "Time to strike",
+            "active": true,
+            "members": null
+        }
+    ]
+}

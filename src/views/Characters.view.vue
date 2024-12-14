@@ -1,10 +1,9 @@
 <template>
     <div class="characters-view">
         <h3>Characters</h3>
+        <!--TODO: add it to scenario data and bind to factions-->
         <ul>
-            <li>Nate Higgers</li>
-            <li>Nuck Figgers</li>
-            <li>Nill Kiggers</li>
+            <li></li>
         </ul>
     </div>    
 </template>

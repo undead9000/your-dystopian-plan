@@ -7,6 +7,15 @@ ul, ol {
     margin: 0;
     padding: 0;
 }
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:visited {
+    color: #fff;
+}
 #app {
     height: calc(100vh - 120px);
     margin: 60px 0;
@@ -35,7 +44,7 @@ ul, ol {
 .tabs {
     margin: 0 0 20px;
 }
-
+/*TODO: nested SCSS doesn't compile into correct CSS in electron build mode */
 .tabs .button {
     border-radius: 4px;
     margin-right: 0.3rem;

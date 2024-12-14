@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Calendar from "../views/Calendar.view.vue"
 import Characters from "../views/Characters.view.vue"
-import Colony from "../views/Colony.view.vue";
+import Colony from "../views/colony/Colony.view.vue";
 import Hero from "../views/Hero.view.vue";
 import Link from "../views/link/Link.view.vue";
 import System from "../views/System.view.vue";

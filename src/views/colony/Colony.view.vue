@@ -17,22 +17,16 @@
       </template>
 
       <template v-if="currentLink === 2">
-        <h3>Fractions list</h3>
-        <ul>
-          <li><Fraction :fraction="{id:1, name: 'Fraction 1'}"/></li>
-          <li><Fraction :fraction="{id:2, name: 'Fraction 2'}"/></li>
-          <li><Fraction :fraction="{id:3, name: 'Fraction 3'}"/></li>
-          <li><Fraction :fraction="{id:4, name: 'Fraction 4'}"/></li>
-        </ul>
+        <Faction />
       </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useColonyStore } from "../store/colonyStore"
+import { useColonyStore } from "../../store/colonyStore"
 import { computed, ref } from "vue";
-import Fraction from "./fraction/Fraction.view.vue"
+import Faction from "./components/Faction.component.vue"
 
 const currentLink = ref(0)
 const singleColonyStore = useColonyStore()

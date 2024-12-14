@@ -1,5 +1,6 @@
 {
-    "colonyId": 0,
+    "id": "0",
     "currentYear": 2258,
-    "quests": null
+    "quests": null,
+    "factions": null
 }
