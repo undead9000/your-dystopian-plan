@@ -1,4 +1,5 @@
 {
     "id": "0",
-    "currentYear": 2258
+    "currentYear": 2258,
+    "governmentStructure": ["Leader", "GovernmentMember", "GovernmentMember", "GovernmentMember"]
 }

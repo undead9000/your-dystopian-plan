@@ -7,6 +7,7 @@ export const en_US = {
     noSignal: "No signal",
     workInProgress: "Work in progress",
     noFactions: "No active factions",
+    noGovernment: "Colony is unmanaged",
     titles: {
         colony: "Colony",
         calendar: "Calendar",
@@ -15,15 +16,20 @@ export const en_US = {
         link: "Link",
         system: "System",
         scienceTechTree: "Science tech tree",
-        colonyData: "Colony data",
+        quests: "Colony quests",
         factionsList: "Factions list",
+        government: "Government",
         earthLink: "Earth",
         officialColonyChannelLink: "Official link",
         hiddenColonyChannelLink: "Hidden link",
     },
     faction: {
-        factionName: "Faction name",
-        factionMotto: "Faction motto",
-        factionMembers: "Faction members"
+        name: "Faction name",
+        motto: "Faction motto",
+        members: "Faction members"
+    },
+    government: {
+        name: "Managing institution",
+        positions: "Government positions"
     }
 }

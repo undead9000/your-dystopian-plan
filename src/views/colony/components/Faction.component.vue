@@ -3,28 +3,29 @@
     <div class="factions-main">
         <ul v-if="factions?.length" class="factions-list">
             <li v-for="faction in factions">
-                <a href="/" @click.prevent="showFactionDetails(faction.id)">{{ faction.factionName }}</a>
+                <a href="/" @click.prevent="showFactionDetails(faction.id)">{{ faction.name }}</a>
             </li>
         </ul>
         <p v-else>{{ t('noFactions') }}</p>
         <div v-if="factions?.length" class="factions-details">
             <template v-if="currentFaction">
                 <p>
-                    <span>{{ t('faction.factionName') }}: </span> <span>{{ currentFaction.factionName }}</span>
+                    <span>{{ t('faction.name') }}: </span> <span>{{ currentFaction.name }}</span>
                 </p>
                 <p>
-                    <span>{{ t('faction.factionMotto') }}: </span> <span>"{{ currentFaction.description }}"</span>
+                    <span>{{ t('faction.motto') }}: </span> <span>"{{ currentFaction.description }}"</span>
                 </p>
                 <p>
-                    <span>{{ t('faction.factionMembers') }}: </span> 
+                    <span>{{ t('faction.members') }}: </span> 
                     <ul class="factions-members">
-                        <li v-for="member in currentFaction.members">{{ member.name }}</li>
+                        <li v-for="member in currentFaction.members">
+                            <template v-if="member.factionPosition">{{ member.factionPosition }}: </template>
+                            {{ member.name }}
+                        </li>
                     </ul>
                 </p>
             </template>
-            <template v-else>
-                <span>{{ t('noFactionSelected') }}</span>
-            </template>
+            <p v-else>{{ t('noFactionSelected') }}</p>
         </div>
     </div>
 </template>
@@ -51,6 +52,10 @@ function showFactionDetails(id: string) {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+
+    a {
+        color: #fff;
+    }
 }
 
 .factions-details {

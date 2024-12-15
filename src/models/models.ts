@@ -1,10 +1,17 @@
+import { FactionPositions, GovernmentPositions } from './enum'
+import { EnumAsUnion } from '../helpers/enum-as-union'
+
+type FactionPositionsTypeUnion = EnumAsUnion<typeof FactionPositions>
+type GovernmentPositionsTypeUnion = EnumAsUnion<typeof GovernmentPositions>
+
 export class Colony {
   constructor(
     public id: string,
     public currentYear: number,
     public quests: Array<Quest> | null,
     public factions: Array<Faction> | null,
-    public characters: Array<Character> | null
+    public characters: Array<Character> | null,
+    public government: Government | null
   ){}
 }
 
@@ -20,7 +27,7 @@ export class Quest {
 export class Faction {
   constructor(
       public id: string,
-      public factionName: string,
+      public name: string,
       public description: string,
       public active: boolean,
       public political: boolean,
@@ -34,6 +41,16 @@ export class Character {
     public id: string,
     public name: string,
     public alive: boolean,
-    public factionIds: string | null
+    public factionIds: string | null,
+    public factionPosition: FactionPositionsTypeUnion | null,
+    public governmentPosition: GovernmentPositionsTypeUnion | null
+  ){}
+}
+
+export class Government {
+  constructor(
+    public id: string,
+    public governmentName: string,
+    public governmentPositions: Array<Character>
   ){}
 }

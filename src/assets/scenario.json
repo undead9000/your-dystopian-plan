@@ -22,7 +22,7 @@
     "factionsData": [
         {
             "id": "0",
-            "factionName": "Agrarian faction",
+            "name": "Agrarian faction",
             "description": "Leave us alone",
             "political": false,
             "active": false,
@@ -30,7 +30,7 @@
         },
         {
             "id": "1",
-            "factionName": "Progressive faction",
+            "name": "Progressive faction",
             "description": "Science or death",
             "political": true,
             "active": true,
@@ -38,7 +38,7 @@
         },
         {
             "id": "2",
-            "factionName": "Business faction",
+            "name": "Business faction",
             "description": "Do money, that's all",
             "political": true,
             "active": true,
@@ -46,7 +46,7 @@
         },
         {
             "id": "3",
-            "factionName": "Workers faction",
+            "name": "Workers faction",
             "description": "Time to strike",
             "political": true,
             "active": true,
@@ -58,49 +58,65 @@
             "id": "0",
             "name": "Willard Medina",
             "alive": true,
-            "factionIds": null
+            "factionIds": null,
+            "factionPosition": null,
+            "governmentPosition": null
         },
         {
             "id": "1",
             "name": "Dale Hobbs",
             "alive": true,
-            "factionIds": "0"
+            "factionIds": "0",
+            "factionPosition": null,
+            "governmentPosition": null
         },
         {
             "id": "2",
             "name": "Zaynab Hess",
             "alive": true,
-            "factionIds": "1"
+            "factionIds": "1",
+            "factionPosition": "Leader",
+            "governmentPosition": "Leader"
         },
         {
             "id": "3",
             "name": "Everett Brady",
             "alive": true,
-            "factionIds": "2"
+            "factionIds": "2",
+            "factionPosition": "Leader",
+            "governmentPosition": "GovernmentMember"
         },
         {
             "id": "4",
             "name": "Kelsey Gould",
             "alive": true,
-            "factionIds": "2"
+            "factionIds": "2",
+            "factionPosition": null,
+            "governmentPosition": null
         },
         {
             "id": "5",
             "name": "Ruth Fleming",
             "alive": true,
-            "factionIds": "3"
+            "factionIds": "3",
+            "factionPosition": "Leader",
+            "governmentPosition": "GovernmentMember"
         },
         {
             "id": "6",
             "name": "Johnathan French",
             "alive": true,
-            "factionIds": "3"
+            "factionIds": "3",
+            "factionPosition": null,
+            "governmentPosition": "GovernmentMember"
         },
         {
             "id": "7",
             "name": "Luda Cannon",
             "alive": true,
-            "factionIds": "3"
+            "factionIds": "3",
+            "factionPosition": null,
+            "governmentPosition": null
         }
     ]
 }

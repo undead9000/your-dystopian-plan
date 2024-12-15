@@ -15,7 +15,7 @@ export const uk = {
         link: "Зв'язок",
         system: "Система",
         scienceTechTree: "Дерево знань",
-        colonyData: "Дані про колонію",
+        quests: "Квести",
         factionsList: "Список фракцій",
         earthLink: "Канал на Землю",
         officialColonyChannelLink: "Канал в колонію",

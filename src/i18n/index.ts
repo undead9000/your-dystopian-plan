@@ -4,7 +4,7 @@ import { uk } from './uk'
 
 export const i18n = createI18n({
     legacy: false,
-    locale: 'uk',
+    locale: 'en-US',
     messages: {
       'en-US': en_US,
       'uk': uk
