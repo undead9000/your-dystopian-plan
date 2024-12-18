@@ -2,13 +2,13 @@
     <h3>{{ t('titles.government') }}</h3>
     <template v-if="government">
         <p>
-            <span>{{ t('government.name') }}: </span> <span>{{ government.governmentName }}</span>
+            <span>{{ t('government.name') }}: </span> <span>{{ government.name }}</span>
         </p>
         <p>
             <span>{{ t('government.positions') }}: </span> 
             <ul class="government-positions">
-                <li v-for="official in government.governmentPositions">
-                    {{ official.governmentPosition }}: {{ official.name }}
+                <li v-for="official in government.positions">
+                    {{ official.positionName }}: {{ official.responsible ? official.responsible.name : t('notAssigned') }}
                 </li>
             </ul>
         </p>

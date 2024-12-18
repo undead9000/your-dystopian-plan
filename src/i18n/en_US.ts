@@ -8,6 +8,7 @@ export const en_US = {
     workInProgress: "Work in progress",
     noFactions: "No active factions",
     noGovernment: "Colony is unmanaged",
+    notAssigned: "not assigned",
     titles: {
         colony: "Colony",
         calendar: "Calendar",

@@ -1,8 +1,8 @@
-export enum GovernmentPositions {
+export enum GovernmentPositionsEnum {
     Leader = 'Premier',
     GovernmentMember = 'Senator',
 }
 
-export enum FactionPositions {
+export enum FactionPositionsEnum {
     Leader = 'Faction leader',
 }
