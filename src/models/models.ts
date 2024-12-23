@@ -1,9 +1,3 @@
-import { FactionPositionsEnum, GovernmentPositionsEnum } from './enum'
-import { EnumAsUnion } from '../helpers/enum-as-union'
-
-type FactionPositionsTypeUnion = EnumAsUnion<typeof FactionPositionsEnum>
-type GovernmentPositionsTypeUnion = EnumAsUnion<typeof GovernmentPositionsEnum>
-
 export class Colony {
   constructor(
     public id: string,
@@ -42,13 +36,13 @@ export class Character {
     public name: string,
     public alive: boolean,
     public factionIds: string | null,
-    public factionPosition: FactionPositionsTypeUnion | null,
-    public governmentPosition: GovernmentPositionsTypeUnion | null
+    public factionPosition: string | null,
+    public governmentPosition: string | null
   ){}
 }
 
 export interface GovernmentPosition {
-  positionName: string,
+  position: string,
   responsible: Character | null
 }
 

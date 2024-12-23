@@ -1,5 +1,14 @@
 {
     "id": "0",
     "currentYear": 2258,
-    "governmentStructure": ["Leader", "GovernmentMember", "GovernmentMember", "GovernmentMember"]
+    "governmentName": "New government",
+    "governmentStructure": ["Leader", "GovernmentMember", "GovernmentMember", "GovernmentMember"],
+    "governmentPositions": [
+        {"Leader": "Premier"},
+        {"GovernmentMember": "Senator"}
+    ],
+    "factionStructure": ["Leader"],
+    "factionPositions": [
+        {"Leader": "Faction leader"}
+    ]
 }
