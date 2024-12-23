@@ -19,7 +19,7 @@
                     <span>{{ t('faction.members') }}: </span> 
                     <ul class="factions-members">
                         <li v-for="member in currentFaction.members">
-                            <template v-if="member.factionPosition">{{ member.factionPosition }}: </template>
+                            <template v-if="member.factionPosition">{{ singleColonyStore.getFactionPositionTitleByKey(member.factionPosition) }}: </template>
                             {{ member.name }}
                         </li>
                     </ul>

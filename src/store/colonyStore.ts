@@ -106,15 +106,23 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       return factionDetails
     }
 
+    function getFactionPositionTitleByKey(key: string) {
+      return factionPositionsDictionary.get(key)
+    }
+
+    function getGovernmentPositionTitleByKey(key: string) {
+      return governmentPositionsDictionary.get(key)
+    }
+
     return {
         state,
-        factionPositionsDictionary,
-        governmentPositionsDictionary,
         init,
         findFactionsById,
         nextTurn,
         getRelatedQuests,
         getActiveFactions,
         getFactionDetails,
+        getFactionPositionTitleByKey,
+        getGovernmentPositionTitleByKey
     }
 })
