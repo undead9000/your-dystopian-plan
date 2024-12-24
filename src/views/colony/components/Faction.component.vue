@@ -17,9 +17,9 @@
                 </p>
                 <p>
                     <span>{{ t('faction.members') }}: </span> 
-                    <ul class="factions-members">
-                        <li v-for="member in currentFaction.members">
-                            <template v-if="member.factionPosition">{{ singleColonyStore.getFactionPositionTitleByKey(member.factionPosition) }}: </template>
+                    <ul v-if="currentFactionMembers" class="factions-members">
+                        <li v-for="member in currentFactionMembers">
+                            <template v-if="member.factionPosition">{{ member.factionPositionName }}: </template>
                             {{ member.name }}
                         </li>
                     </ul>
@@ -34,16 +34,18 @@
 import { computed, ref } from "vue";
 import { useI18n } from 'vue-i18n'
 import { useColonyStore } from "../../../store/colonyStore"
-import { Faction } from '../../../models/models'
+import { Faction, Character } from '../../../models/models'
 
 const singleColonyStore = useColonyStore()
 const { t } = useI18n()
 
 const factions = computed(() => singleColonyStore.getActiveFactions())
 const currentFaction = ref<Faction | null>(null)
+const currentFactionMembers = ref<Array<Character> | null>(null)
 
 function showFactionDetails(id: string) {
     currentFaction.value = singleColonyStore.getFactionDetails(id)
+    currentFactionMembers.value = singleColonyStore.getFactionCharacters(id)
 }
 </script>
 
@@ -60,7 +62,7 @@ function showFactionDetails(id: string) {
 
 .factions-details {
     border: 1px solid #aaa;
-    padding: 24px 36px;
+    padding: 12px 18px;
     width: 100%;
     max-width: 320px;
 }

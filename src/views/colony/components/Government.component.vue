@@ -8,7 +8,7 @@
             <span>{{ t('government.positions') }}: </span> 
             <ul class="government-positions">
                 <li v-for="official in government.positions">
-                    {{ singleColonyStore.getGovernmentPositionTitleByKey(official.position) }}: {{ official.responsible ? official.responsible.name : t('notAssigned') }}
+                    {{ official.positionName }}: {{ official.responsibleId ? responsibleCharacter(official.responsibleId) : t('notAssigned') }}
                 </li>
             </ul>
         </p>
@@ -25,6 +25,7 @@ const singleColonyStore = useColonyStore()
 const { t } = useI18n()
 
 const government = computed(() => singleColonyStore.state.colony?.government)
+const responsibleCharacter = (id: string) => singleColonyStore.getCharacterById(id) ? singleColonyStore.getCharacterById(id)!.name : ''
 </script>
 
 <style lang="scss">

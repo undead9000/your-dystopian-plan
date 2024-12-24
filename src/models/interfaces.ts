@@ -2,7 +2,7 @@ export interface CharacterRawData {
     id: string,
     name: string,
     alive: boolean,
-    factionIds: string | null,
+    factionId: string | null,
     factionPosition: string | null
     governmentPosition: string | null
 }

@@ -25,7 +25,7 @@ export class Faction {
       public description: string,
       public active: boolean,
       public political: boolean,
-      public members: Array<Character> | null
+      public members: Array<string> | null
   ){}
 }
 
@@ -35,15 +35,19 @@ export class Character {
     public id: string,
     public name: string,
     public alive: boolean,
-    public factionIds: string | null,
+    public factionId: string | null,
+    public faction: Faction | null,
     public factionPosition: string | null,
-    public governmentPosition: string | null
+    public factionPositionName: string | null,
+    public governmentPosition: string | null,
+    public governmentPositionName: string | null
   ){}
 }
 
 export interface GovernmentPosition {
   position: string,
-  responsible: Character | null
+  positionName: string,
+  responsibleId: string | null
 }
 
 export class Government {

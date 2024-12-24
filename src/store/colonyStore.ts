@@ -3,26 +3,28 @@ import { reactive } from 'vue'
 import { Colony, Faction, Character, GovernmentPosition } from '../models/models'
 import { CharacterRawData } from '../models/interfaces'
 import scenarioData from "../assets/scenario.json"
-import initialColony from "../assets/initialColonyData.json"
 
 export const useColonyStore = defineStore('singleColonyStore', () => {
-    const factionPositionsDictionary = getSturctureMap(initialColony.factionPositions)
-    const governmentPositionsDictionary = getSturctureMap(initialColony.governmentPositions)
+    const initColonyData = scenarioData.colonyData
+    const initFactionsData = scenarioData.factionsData
+    const initCharactersData = scenarioData.charactersData
+    const factionPositionsDictionary = getSturctureMap(initColonyData.factionPositions)
+    const governmentPositionsDictionary = getSturctureMap(initColonyData.governmentPositions)
 
     const state = reactive({
         colony: null as Colony | null,
     })
 
     function init() {
-      const initialCharacters = mapCharactersData(scenarioData.charactersData)
+      const initialCharacters = mapCharactersData(initFactionsData, initCharactersData)
 
       state.colony = {
-        id: initialColony.id,
-        currentYear: initialColony.currentYear,
+        id: initColonyData.id,
+        currentYear: initColonyData.currentYear,
         quests: scenarioData.questsData,
-        factions: bindCharactersToFactions(scenarioData.factionsData, initialCharacters),
+        factions: bindCharactersToFactions(initFactionsData, initialCharacters),
         characters: initialCharacters,
-        government: assingCharactersToGovernment(initialColony.governmentStructure, initialColony.governmentName, initialCharacters)
+        government: assingCharactersToGovernment(initColonyData.governmentStructure, initColonyData.governmentName, initialCharacters)
       }
     }
 
@@ -37,7 +39,8 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
 
         return {
           position: position.position,
-          responsible: employee ? employee : null
+          positionName: getGovernmentPositionTitleByKey(position.position),
+          responsibleId: employee ? employee.id : null
         }
       })
 
@@ -49,7 +52,8 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         name: name,
         positions: initialStructure.map(position => ({
           position: position,
-          responsible: null
+          positionName: position,
+          responsibleId: null
         } as GovernmentPosition))
       } 
     }
@@ -57,26 +61,31 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
     function bindCharactersToFactions(factions: Array<Faction>, characters: Array<Character>) {
       const factionsWithCharacters = factions.map(faction => ({
         ...faction,
-        members: characters.filter(character => character.factionIds === faction.id) ?? null
+        members: characters.filter(character => character.factionId === faction.id).map(character => character.id) ?? null
       }))
       return factionsWithCharacters
     }
 
-    function findFactionsById(id: string) {
-      if(!state.colony || !state.colony.factions || typeof state.colony.factions.find(faction => faction.id === id) === 'undefined') return ''
-      return state.colony.factions.find(faction => faction.id === id)!.name
+    function findFactionsById(factions: Array<Faction>, id: string | null) {
+      if(!id) return undefined
+
+      return factions.find(faction => faction.id === id)
     }
 
-    function mapCharactersData(characters: Array<CharacterRawData>) {
+    function mapCharactersData(factions: Array<Faction>, characters: Array<CharacterRawData>) {
       return characters.map(character => ({
         ...character,
+        faction: findFactionsById(factions, character.factionId) ?? null,
         factionPosition: character.factionPosition ? character.factionPosition : null,
-        governmentPosition: character.governmentPosition ? character.governmentPosition : null
+        factionPositionName: character.factionPosition ? getFactionPositionTitleByKey(character.factionPosition) : null,
+        governmentPosition: character.governmentPosition ? character.governmentPosition : null,
+        governmentPositionName: character.governmentPosition ? getGovernmentPositionTitleByKey(character.governmentPosition) : null
       }))
     }
 
     function nextTurn() {
       if(!state.colony) return
+
       state.colony.currentYear = state.colony.currentYear + 1
     }
 
@@ -95,15 +104,25 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
     function getActiveFactions() {
       if(!state.colony?.factions) return null
 
-      const activeFactions = state.colony.factions.filter(item => item.active)
-      return activeFactions
+      return state.colony.factions.filter(item => item.active)
     }
 
     function getFactionDetails(factionId: string) {
       if(!state.colony?.factions) return null
 
-      const factionDetails = state.colony.factions.find(faction => faction.id === factionId) ?? null
-      return factionDetails
+      return state.colony.factions.find(faction => faction.id === factionId) ?? null
+    }
+
+    function getFactionCharacters(factionId: string) {
+      if(!state.colony?.characters) return null
+
+      return state.colony.characters.filter(character => character.alive && character.factionId === factionId) ?? null
+    }
+
+    function getCharacterById(characterId: string) {
+      if(!state.colony?.characters) return null
+
+      return state.colony.characters.find(character => character.id === characterId) ?? null
     }
 
     function getFactionPositionTitleByKey(key: string) {
@@ -117,12 +136,11 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
     return {
         state,
         init,
-        findFactionsById,
         nextTurn,
         getRelatedQuests,
         getActiveFactions,
         getFactionDetails,
-        getFactionPositionTitleByKey,
-        getGovernmentPositionTitleByKey
+        getFactionCharacters,
+        getCharacterById
     }
 })

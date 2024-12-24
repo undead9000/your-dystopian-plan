@@ -1,4 +1,18 @@
 {
+    "colonyData":{
+        "id": "0",
+        "currentYear": 2258,
+        "governmentName": "New government",
+        "governmentStructure": ["Leader", "GovernmentMember", "GovernmentMember", "GovernmentMember"],
+        "governmentPositions": [
+            {"Leader": "Premier"},
+            {"GovernmentMember": "Senator"}
+        ],
+        "factionStructure": ["Leader"],
+        "factionPositions": [
+            {"Leader": "Faction leader"}
+        ]
+    },
     "questsData": [
         {
             "id": "0",
@@ -58,7 +72,7 @@
             "id": "0",
             "name": "Willard Medina",
             "alive": true,
-            "factionIds": null,
+            "factionId": null,
             "factionPosition": null,
             "governmentPosition": null
         },
@@ -66,7 +80,7 @@
             "id": "1",
             "name": "Dale Hobbs",
             "alive": true,
-            "factionIds": "0",
+            "factionId": "0",
             "factionPosition": null,
             "governmentPosition": null
         },
@@ -74,7 +88,7 @@
             "id": "2",
             "name": "Zaynab Hess",
             "alive": true,
-            "factionIds": "1",
+            "factionId": "1",
             "factionPosition": "Leader",
             "governmentPosition": "Leader"
         },
@@ -82,7 +96,7 @@
             "id": "3",
             "name": "Everett Brady",
             "alive": true,
-            "factionIds": "2",
+            "factionId": "2",
             "factionPosition": "Leader",
             "governmentPosition": "GovernmentMember"
         },
@@ -90,7 +104,7 @@
             "id": "4",
             "name": "Kelsey Gould",
             "alive": true,
-            "factionIds": "2",
+            "factionId": "2",
             "factionPosition": null,
             "governmentPosition": null
         },
@@ -98,7 +112,7 @@
             "id": "5",
             "name": "Ruth Fleming",
             "alive": true,
-            "factionIds": "3",
+            "factionId": "3",
             "factionPosition": "Leader",
             "governmentPosition": "GovernmentMember"
         },
@@ -106,7 +120,7 @@
             "id": "6",
             "name": "Johnathan French",
             "alive": true,
-            "factionIds": "3",
+            "factionId": "3",
             "factionPosition": null,
             "governmentPosition": "GovernmentMember"
         },
@@ -114,7 +128,7 @@
             "id": "7",
             "name": "Luda Cannon",
             "alive": true,
-            "factionIds": "3",
+            "factionId": "3",
             "factionPosition": null,
             "governmentPosition": null
         }
