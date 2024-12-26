@@ -1,5 +1,5 @@
 export const en_US = {
-    currentYear: "Colony current year",
+    currentDate: "Colony current date",
     nextTurn: "Next turn",
     noFactionSelected: "No faction selected",
     noRelatedQuests: "No related quests",

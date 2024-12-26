@@ -1,5 +1,5 @@
 export const uk = {
-    currentYear: "Поточний рік",
+    currentDate: "Поточна дата",
     nextTurn: "Завершити хід",
     noFactionSelected: "Немає обраної фракції",
     noRelatedQuests: "Немає пов'язаних квестів",

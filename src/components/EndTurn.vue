@@ -1,6 +1,6 @@
 <template>
     <div class="end-turn">
-        <div>{{ t('currentYear') }}: {{ singleColonyStore.state.colony?.currentYear }}</div>
+        <div>{{ t('currentDate') }}: {{ singleColonyStore.getCurrentDateFormat() }}</div>
         <button class="end-turn-button" @click="singleColonyStore.nextTurn()">{{ t('nextTurn') }}</button>
     </div>
 </template>

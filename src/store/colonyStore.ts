@@ -20,12 +20,28 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
 
       state.colony = {
         id: initColonyData.id,
-        currentYear: initColonyData.currentYear,
+        currentDate: setInitDate(),
         quests: scenarioData.questsData,
         factions: bindCharactersToFactions(initFactionsData, initialCharacters),
         characters: initialCharacters,
         government: assingCharactersToGovernment(initColonyData.governmentStructure, initColonyData.governmentName, initialCharacters)
       }
+    }
+
+    function setInitDate() {
+      return new Date(Date.UTC(initColonyData.currentYear, 0, 1, 0, 0))
+    }
+
+    function getCurrentDateFormat() {
+      if(!state.colony) return ''
+      
+      const options = {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      } as Intl.DateTimeFormatOptions
+
+      return state.colony?.currentDate.toLocaleDateString('en', options)
     }
 
     function assingCharactersToGovernment(initialStructure: string[], name: string, characters: Array<Character>) {
@@ -86,15 +102,15 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
     function nextTurn() {
       if(!state.colony) return
 
-      state.colony.currentYear = state.colony.currentYear + 1
+      const date = new Date(state.colony.currentDate)
+      state.colony.currentDate = new Date(date.setMonth(date.getMonth() + 1))
     }
 
     function getRelatedQuests() {
       if(!state.colony?.quests) return []
 
-      const currentYear = state.colony.currentYear
-      const relatedQuests = state.colony.quests.filter(item => item.startYear <= currentYear && item.endYear > currentYear)
-      return relatedQuests
+      const currentYear = state.colony.currentDate.getFullYear()
+      return state.colony.quests.filter(item => item.startYear <= currentYear && item.endYear > currentYear) ?? []
     }
 
     function getSturctureMap(dictionary: Record<string, any>[]) {
@@ -136,6 +152,7 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
     return {
         state,
         init,
+        getCurrentDateFormat,
         nextTurn,
         getRelatedQuests,
         getActiveFactions,

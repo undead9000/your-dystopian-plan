@@ -1,7 +1,7 @@
 export class Colony {
   constructor(
     public id: string,
-    public currentYear: number,
+    public currentDate: Date,
     public quests: Array<Quest> | null,
     public factions: Array<Faction> | null,
     public characters: Array<Character> | null,
