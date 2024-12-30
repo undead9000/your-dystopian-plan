@@ -32,5 +32,14 @@ export const en_US = {
     government: {
         name: "Managing institution",
         positions: "Government positions"
+    },
+    calendar: {
+        monday: "Monday",
+        tuesday: "Tuesday",
+        wednesday: "Wednesday",
+        thursday: "Thursday",
+        friday: "Friday",
+        saturday: "Saturday",
+        sunday: "Sunday"
     }
 }

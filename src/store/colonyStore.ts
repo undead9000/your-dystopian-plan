@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import { Colony, Faction, Character, GovernmentPosition } from '../models/models'
+import { Colony, Faction, Character, GovernmentPosition, MonthDays } from '../models/models'
 import { CharacterRawData } from '../models/interfaces'
 import scenarioData from "../assets/scenario.json"
 
@@ -149,6 +149,63 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       return governmentPositionsDictionary.get(key)
     }
 
+    function getCurrentMonthDays() {
+      if(!state.colony?.currentDate) return 0
+
+      let result = [] as Array<MonthDays>
+      const options = { weekday: "long" } as Intl.DateTimeFormatOptions;
+      const monthLength = new Date(state.colony.currentDate.getFullYear(), (state.colony.currentDate.getMonth() ?? 0) + 1, 0).getDate()
+
+      for(let i = 1; i <= monthLength; i++) {
+        const date = new Date(state.colony.currentDate.getFullYear(), (state.colony.currentDate.getMonth() ?? 0), i)
+
+        result.push({
+          day: i,
+          date: date,
+          shift: date.getDay(),
+          weekdayName: new Intl.DateTimeFormat("en", options).format(date)
+        })
+      }
+
+      let startShiftLength = result[0].shift ? result[0].shift : 7
+      let startShift = [] as Array<MonthDays>
+
+      for(let i = startShiftLength - 1; i >= 1; i--) {
+        const date = new Date(state.colony.currentDate.getFullYear(), (state.colony.currentDate.getMonth() ?? 0), 0)
+        const prevDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - i + 1)
+
+        startShift.push({
+          day: prevDate.getDate(),
+          date: prevDate,
+          shift: startShiftLength - i,
+          weekdayName: new Intl.DateTimeFormat("en", options).format(prevDate)
+        })
+      }
+
+      result = startShift.concat(result)
+      let endShiftLength = result.at(-1)?.shift
+
+      if(endShiftLength) {
+        let endShift = [] as Array<MonthDays>
+        
+        for(let i = 1; i <= (7 - endShiftLength); i++) {
+          const nextDate = new Date(state.colony.currentDate.getFullYear(), (state.colony.currentDate.getMonth() ?? 0) + 1, 0)
+          nextDate.setDate(nextDate.getDate() + i)
+
+          endShift.push({
+            day: nextDate.getDate(),
+            date: nextDate,
+            shift: (i + 1) % 7,
+            weekdayName: new Intl.DateTimeFormat("en", options).format(nextDate)
+          })
+        }
+
+        result = result.concat(endShift)
+      }
+      
+      return result
+    }
+
     return {
         state,
         init,
@@ -158,6 +215,7 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         getActiveFactions,
         getFactionDetails,
         getFactionCharacters,
-        getCharacterById
+        getCharacterById,
+        getCurrentMonthDays,
     }
 })

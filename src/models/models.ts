@@ -56,3 +56,10 @@ export class Government {
     public positions: Array<GovernmentPosition>
   ){}
 }
+
+export interface MonthDays {
+  day: number,
+  date: Date,
+  shift: number,
+  weekdayName: string
+}
