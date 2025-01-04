@@ -41,5 +41,8 @@ export const en_US = {
         friday: "Friday",
         saturday: "Saturday",
         sunday: "Sunday"
+    },
+    hero: {
+        factionRelationToHero: "'s relation to consul"
     }
 }

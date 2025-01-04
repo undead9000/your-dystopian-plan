@@ -19,8 +19,8 @@
                     <span>{{ t('faction.members') }}: </span> 
                     <ul v-if="currentFactionMembers" class="factions-members">
                         <li v-for="member in currentFactionMembers">
-                            <template v-if="member.factionPosition">{{ member.factionPositionName }}: </template>
-                            {{ member.name }}
+                            <template v-if="member.factionPositionKey">{{ member.factionPositionName }}: </template>
+                            <span>{{ member.name }}</span>
                         </li>
                     </ul>
                 </p>

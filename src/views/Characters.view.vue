@@ -4,14 +4,14 @@
         <ul class="characters-list">
             <li v-for="character in characters"  class="characters-list-positions">
                 <span>
-                    {{ character.name }}<span v-if="character.governmentPosition || character.factionPosition">,</span>
+                    {{ character.name }}<span v-if="character.governmentPositionKey || character.factionPositionKey">,</span>
                 </span>
-                <span v-if="character.governmentPosition">
+                <span v-if="character.governmentPositionKey">
                     {{ character.governmentPositionName }} 
                 </span>
-                <span v-if="character.governmentPosition && character.factionPosition"> and </span>
-                <span v-else-if="character.factionPosition">, </span>
-                <span v-if="character.factionPosition && character.factionId" class="faction">
+                <span v-if="character.governmentPositionKey && character.factionPositionKey"> and </span>
+                <span v-else-if="character.factionPositionKey">, </span>
+                <span v-if="character.factionPositionKey && character.factionId" class="faction">
                     {{ character.factionPositionName }} in <span>"{{ character.faction?.name }}"</span>
                 </span>
             </li>
@@ -20,9 +20,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useColonyStore } from "../store/colonyStore"
-import { computed } from 'vue';
 
 const singleColonyStore = useColonyStore()
 const { t } = useI18n()

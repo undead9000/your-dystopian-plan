@@ -40,7 +40,8 @@
             "description": "Leave us alone",
             "political": false,
             "active": false,
-            "members": null
+            "members": null,
+            "relations": null
         },
         {
             "id": "1",
@@ -48,7 +49,12 @@
             "description": "Science or death",
             "political": true,
             "active": true,
-            "members": null
+            "members": null,
+            "relations": [{
+                "type": "FractionCharacter",
+                "targetId": "1",
+                "value": 100
+            }]
         },
         {
             "id": "2",
@@ -56,7 +62,12 @@
             "description": "Do money, that's all",
             "political": true,
             "active": true,
-            "members": null
+            "members": null,
+            "relations": [{
+                "type": "FractionCharacter",
+                "targetId": "hero",
+                "value": 0
+            }]
         },
         {
             "id": "3",
@@ -64,7 +75,12 @@
             "description": "Time to strike",
             "political": true,
             "active": true,
-            "members": null
+            "members": null,
+            "relations": [{
+                "type": "FractionCharacter",
+                "targetId": "hero",
+                "value": 50
+            }]
         }
     ],
     "charactersData": [

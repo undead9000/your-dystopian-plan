@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import { Colony, Faction, Character, GovernmentPosition, MonthDays } from '../models/models'
-import { CharacterRawData } from '../models/interfaces'
+import { Colony, Faction, Character, GovernmentPosition, MonthDays } from '../models'
+import { CharacterRawData, FactionRawData } from '../models/'
+import { type RelationType } from '../models'
 import scenarioData from "../assets/scenario.json"
 
 export const useColonyStore = defineStore('singleColonyStore', () => {
     const initColonyData = scenarioData.colonyData
-    const initFactionsData = scenarioData.factionsData
+    const initFactionsData = initFactions(scenarioData.factionsData)
     const initCharactersData = scenarioData.charactersData
-    const factionPositionsDictionary = getSturctureMap(initColonyData.factionPositions)
-    const governmentPositionsDictionary = getSturctureMap(initColonyData.governmentPositions)
+    const factionPositionsDictionary = setupSturctureMap(initColonyData.factionPositions)
+    const governmentPositionsDictionary = setupSturctureMap(initColonyData.governmentPositions)
 
     const state = reactive({
         colony: null as Colony | null,
@@ -24,8 +25,36 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         quests: scenarioData.questsData,
         factions: bindCharactersToFactions(initFactionsData, initialCharacters),
         characters: initialCharacters,
-        government: assingCharactersToGovernment(initColonyData.governmentStructure, initColonyData.governmentName, initialCharacters)
+        government: assingCharactersToGovernment(initColonyData.governmentStructure, initColonyData.governmentName, initialCharacters),
+        hero: initHero()
       }
+    }
+
+    function initHero() {
+      return {
+        id: "hero",
+        name: "Earth's consul",
+        alive: true,
+        factionId :null,
+        factionPositionKey :null,
+        governmentPositionKey :null,
+        faction :null,
+        factionPositionName :null,
+        governmentPositionName :null
+      }
+    }
+
+    function initFactions(factions: Array<FactionRawData>) {
+      return factions.map(faction => ({
+        ...faction,
+        relations: faction.relations
+          ? faction.relations.map(relation => ({
+            ...relation,
+            type: relation.type as RelationType,
+            targetId: relation.targetId
+          }))
+          : null
+      }))
     }
 
     function setInitDate() {
@@ -46,16 +75,16 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
 
     function assingCharactersToGovernment(initialStructure: string[], name: string, characters: Array<Character>) {
       const structure = setInitialGovernmentStructure(initialStructure, name)
-      const assignedIntoGovernment = characters.filter(character => character.governmentPosition)
+      const assignedIntoGovernment = characters.filter(character => character.governmentPositionKey)
 
       structure.positions = structure.positions.map(position => {
-        const employee = assignedIntoGovernment.find(character => character.governmentPosition === position.position)
-        const index = assignedIntoGovernment.findIndex(character => character.governmentPosition === position.position)
+        const employee = assignedIntoGovernment.find(character => character.governmentPositionKey === position.positionKey)
+        const index = assignedIntoGovernment.findIndex(character => character.governmentPositionKey === position.positionKey)
         if(employee) assignedIntoGovernment.splice(index, 1)
 
         return {
-          position: position.position,
-          positionName: getGovernmentPositionTitleByKey(position.position),
+          positionKey: position.positionKey,
+          positionName: getGovernmentPositionTitleByKey(position.positionKey),
           responsibleId: employee ? employee.id : null
         }
       })
@@ -67,7 +96,7 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       return {
         name: name,
         positions: initialStructure.map(position => ({
-          position: position,
+          positionKey: position,
           positionName: position,
           responsibleId: null
         } as GovernmentPosition))
@@ -92,9 +121,9 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       return characters.map(character => ({
         ...character,
         faction: findFactionsById(factions, character.factionId) ?? null,
-        factionPosition: character.factionPosition ? character.factionPosition : null,
+        factionPositionKey: character.factionPosition ? character.factionPosition : null,
         factionPositionName: character.factionPosition ? getFactionPositionTitleByKey(character.factionPosition) : null,
-        governmentPosition: character.governmentPosition ? character.governmentPosition : null,
+        governmentPositionKey: character.governmentPosition ? character.governmentPosition : null,
         governmentPositionName: character.governmentPosition ? getGovernmentPositionTitleByKey(character.governmentPosition) : null
       }))
     }
@@ -113,7 +142,7 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       return state.colony.quests.filter(item => item.startYear <= currentYear && item.endYear > currentYear) ?? []
     }
 
-    function getSturctureMap(dictionary: Record<string, any>[]) {
+    function setupSturctureMap(dictionary: Record<string, any>[]) {
       return new Map(dictionary.map(position => [Object.keys(position)[0], Object.values(position)[0]]))
     }
 

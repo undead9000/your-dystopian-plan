@@ -13,7 +13,7 @@
                 v-for="day in days" 
                 :class="isActive(day) ? 'inactive' : ''"
             > 
-                {{ day.date }}
+                {{ day.day }}
             </li>
         </ul>
     </div>
@@ -23,7 +23,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useColonyStore } from "../store/colonyStore"
-import { MonthDays } from '../models/models'
+import { MonthDays } from '../models'
 
 const singleColonyStore = useColonyStore()
 const { t } = useI18n()

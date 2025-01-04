@@ -1,3 +1,6 @@
+import { type FactionIdType, type CharacterIdType } from './types'
+import { GovernmentPosition, Relation } from './interfaces'
+
 export class Colony {
   constructor(
     public id: string,
@@ -5,7 +8,8 @@ export class Colony {
     public quests: Array<Quest> | null,
     public factions: Array<Faction> | null,
     public characters: Array<Character> | null,
-    public government: Government | null
+    public government: Government | null,
+    public hero: Character
   ){}
 }
 
@@ -20,34 +24,29 @@ export class Quest {
 
 export class Faction {
   constructor(
-      public id: string,
+      public id: FactionIdType,
       public name: string,
       public description: string,
       public active: boolean,
       public political: boolean,
-      public members: Array<string> | null
+      public members: Array<string> | null,
+      public relations: Array<Relation> | null
   ){}
 }
 
 //TODO: implement multifraction binding
 export class Character {
   constructor(
-    public id: string,
+    public id: CharacterIdType,
     public name: string,
     public alive: boolean,
     public factionId: string | null,
     public faction: Faction | null,
-    public factionPosition: string | null,
+    public factionPositionKey: string | null,
     public factionPositionName: string | null,
-    public governmentPosition: string | null,
+    public governmentPositionKey: string | null,
     public governmentPositionName: string | null
   ){}
-}
-
-export interface GovernmentPosition {
-  position: string,
-  positionName: string,
-  responsibleId: string | null
 }
 
 export class Government {
@@ -55,11 +54,4 @@ export class Government {
     public name: string,
     public positions: Array<GovernmentPosition>
   ){}
-}
-
-export interface MonthDays {
-  day: number,
-  date: Date,
-  shift: number,
-  weekdayName: string
 }
