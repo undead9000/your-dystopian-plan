@@ -1,7 +1,7 @@
 <template>
     <div class="end-turn">
         <div>{{ t('currentDate') }}: {{ singleColonyStore.getCurrentDateFormat() }}</div>
-        <button class="end-turn-button" @click="singleColonyStore.nextTurn()">{{ t('nextTurn') }}</button>
+        <button class="end-turn-button" @click="endTurnHandler()">{{ t('nextTurn') }}</button>
     </div>
 </template>
 
@@ -11,4 +11,12 @@ import { useColonyStore } from "../store/colonyStore"
 
 const singleColonyStore = useColonyStore()
 const { t } = useI18n()
+
+function endTurnHandler() {
+    singleColonyStore.isActionsEmpty()
+        ? singleColonyStore.nextTurn()
+        : confirm(t('emptyActionsQueueConfirm'))
+            ? singleColonyStore.nextTurn()
+            : false
+}
 </script>

@@ -1,6 +1,6 @@
 import { type FactionIdType, type CharacterIdType } from './types'
 import { GovernmentPosition, Relation } from './interfaces'
-import { FactionRawData } from '../models'
+//import { FactionRawData } from '../models'
 
 export class Colony {
   constructor(
@@ -49,7 +49,7 @@ export class Faction {
 
     const relation = this.relations.find(relation => relation.targetId === targetId)
     relation 
-      ? relation.value++
+      ? relation.value += 0.01
       : this.relations.push({
         type: "FractionCharacter",
         targetId: targetId,

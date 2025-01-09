@@ -9,6 +9,7 @@ export const en_US = {
     noFactions: "No active factions",
     noGovernment: "Colony is unmanaged",
     notAssigned: "not assigned",
+    emptyActionsQueueConfirm: "Actions queue is empty. Are you sure to proceed?",
     titles: {
         colony: "Colony",
         planner: "Planner",
@@ -32,6 +33,11 @@ export const en_US = {
     government: {
         name: "Managing institution",
         positions: "Government positions"
+    },
+    planner: {
+        selectActionFor: "Select action for",
+        defaultOptionName: "Select Action",
+        improveRelationships: "Improve relationships with"
     },
     calendar: {
         monday: "Monday",

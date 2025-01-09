@@ -17,11 +17,11 @@
             </li>
         </ul>
         <div v-if="factions" class="planner-actions">
-            <h3>Select action for {{ currentMonthTitle }}:</h3>
+            <h3>{{ t('planner.selectActionFor') }} {{ currentMonthTitle }}:</h3>
             <select v-model="currentFactionId" @change="singleColonyStore.addAction('', currentFactionId ?? null)">
-                <option disabled value>Select Action</option>
+                <option disabled value>{{ t('planner.defaultOptionName') }}</option>
                 <option v-for="faction in factions" :value="faction.id">
-                    Improve relationships with {{ faction.name }}
+                    {{ t('planner.improveRelationships') }} {{ faction.name }}
                 </option>
             </select>
         </div>

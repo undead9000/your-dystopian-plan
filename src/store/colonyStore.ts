@@ -161,6 +161,12 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       }
     }
 
+    function isActionsEmpty() {
+      if(!state.colony?.actions) return
+
+      return !!state.colony?.actions.length
+    }
+
     function getRelatedQuests() {
       if(!state.colony?.quests) return []
 
@@ -176,6 +182,15 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       if(!state.colony?.factions) return null
 
       return state.colony.factions.filter(item => item.active)
+    }
+
+    function getActiveFactionsRelations() {
+      if(!state.colony?.factions) return null
+
+      const activeFactions = getActiveFactions()
+      return activeFactions
+        ? new Map(activeFactions.map(faction => [toRaw(faction), toRaw(faction.relations)]))
+        : null
     }
 
     function getFactionDetails(factionId: string) {
@@ -268,10 +283,12 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         nextTurn,
         getRelatedQuests,
         getActiveFactions,
+        getActiveFactionsRelations,
         getFactionDetails,
         getFactionCharacters,
         getCharacterById,
         getCurrentMonthDays,
-        addAction
+        addAction,
+        isActionsEmpty
     }
 })
