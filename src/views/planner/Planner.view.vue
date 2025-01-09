@@ -1,7 +1,7 @@
 <template>
-    <div class="calendar-view">
+    <div class="planner-view">
         <h3>{{ currentMonthTitle }}</h3>
-        <ul v-if="days" class="calendar-view-list">
+        <ul v-if="days" class="planner-calendar">
             <li class="title">{{ t('calendar.monday') }}</li>
             <li class="title">{{ t('calendar.tuesday') }}</li>
             <li class="title">{{ t('calendar.wednesday') }}</li>
@@ -16,14 +16,23 @@
                 {{ day.day }}
             </li>
         </ul>
+        <div v-if="factions" class="planner-actions">
+            <h3>Select action for {{ currentMonthTitle }}:</h3>
+            <select v-model="currentFactionId" @change="singleColonyStore.addAction('', currentFactionId ?? null)">
+                <option disabled value>Select Action</option>
+                <option v-for="faction in factions" :value="faction.id">
+                    Improve relationships with {{ faction.name }}
+                </option>
+            </select>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n'
-import { useColonyStore } from "../store/colonyStore"
-import { MonthDays } from '../models'
+import { useColonyStore } from "../../store/colonyStore"
+import { MonthDays } from '../../models'
 
 const singleColonyStore = useColonyStore()
 const { t } = useI18n()
@@ -32,13 +41,17 @@ const options = {
     year: 'numeric'
 } as Intl.DateTimeFormatOptions
 
+const currentFactionId = ref<string | null>(null)
+
 const currentMonthTitle = computed(() => singleColonyStore.state.colony?.currentDate.toLocaleDateString('en', options))
 const days = computed(() => singleColonyStore.getCurrentMonthDays())
+const factions = computed(() => singleColonyStore.getActiveFactions())
 const isActive = (day: MonthDays) => day.date.getMonth() !== singleColonyStore.state.colony?.currentDate.getMonth()
+
 </script>
 
 <style lang="scss">
-.calendar-view-list {
+.planner-calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(4, 1fr);

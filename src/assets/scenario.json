@@ -53,7 +53,7 @@
             "relations": [{
                 "type": "FractionCharacter",
                 "targetId": "1",
-                "value": 100
+                "value": 72
             }]
         },
         {
@@ -63,11 +63,18 @@
             "political": true,
             "active": true,
             "members": null,
-            "relations": [{
-                "type": "FractionCharacter",
-                "targetId": "hero",
-                "value": 0
-            }]
+            "relations": [
+                {
+                    "type": "FractionCharacter",
+                    "targetId": "1",
+                    "value": 100
+                },
+                {
+                    "type": "FractionCharacter",
+                    "targetId": "hero",
+                    "value": 0
+                }
+            ]
         },
         {
             "id": "3",

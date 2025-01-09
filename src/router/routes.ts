@@ -1,6 +1,6 @@
 export enum PagesLinks {
     Colony = 'Colony',
-    Calendar = 'Calendar',
+    Planner = 'Planner',
     Characters = 'Characters',
     Hero = 'Hero',
     Link = 'Link',

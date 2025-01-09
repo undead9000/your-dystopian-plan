@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Calendar from "../views/Calendar.view.vue"
+import Calendar from "../views/planner/Planner.view.vue"
 import Characters from "../views/Characters.view.vue"
 import Colony from "../views/colony/Colony.view.vue";
 import Hero from "../views/Hero.view.vue";
@@ -14,8 +14,8 @@ const routes = [
         component: Colony,
     },
     {
-        path: "/calendar",
-        name: PagesLinks.Calendar,
+        path: "/planner",
+        name: PagesLinks.Planner,
         component: Calendar,
     },
     {

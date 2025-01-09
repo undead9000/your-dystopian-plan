@@ -1,5 +1,6 @@
 import { type FactionIdType, type CharacterIdType } from './types'
 import { GovernmentPosition, Relation } from './interfaces'
+import { FactionRawData } from '../models'
 
 export class Colony {
   constructor(
@@ -9,7 +10,8 @@ export class Colony {
     public factions: Array<Faction> | null,
     public characters: Array<Character> | null,
     public government: Government | null,
-    public hero: Character
+    public hero: Character,
+    public actions: Array<Action>
   ){}
 }
 
@@ -24,14 +26,36 @@ export class Quest {
 
 export class Faction {
   constructor(
-      public id: FactionIdType,
-      public name: string,
-      public description: string,
-      public active: boolean,
-      public political: boolean,
-      public members: Array<string> | null,
-      public relations: Array<Relation> | null
-  ){}
+    public id: FactionIdType,
+    public name: string,
+    public description: string,
+    public active: boolean,
+    public political: boolean,
+    public members: Array<string> | null,
+    public relations: Array<Relation> | null
+  ){
+    this.id = id,
+    this.name = name,
+    this.description = description,
+    this.active = active,
+    this.political = political
+    this.members = members,
+    this.relations = relations
+  }
+
+  //TODO: add calling this method from stack
+  updateRelations(targetId: string) {
+    if(!this.relations) return
+
+    const relation = this.relations.find(relation => relation.targetId === targetId)
+    relation 
+      ? relation.value++
+      : this.relations.push({
+        type: "FractionCharacter",
+        targetId: targetId,
+        value: 0
+      })
+  }
 }
 
 //TODO: implement multifraction binding
@@ -54,4 +78,14 @@ export class Government {
     public name: string,
     public positions: Array<GovernmentPosition>
   ){}
+}
+
+export class Action {
+  constructor(
+    public id: string,
+    public type: string,
+    public value: number,
+    public priority: number,
+    public callback: Function
+  ) {}
 }

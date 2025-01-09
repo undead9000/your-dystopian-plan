@@ -11,7 +11,7 @@ export const en_US = {
     notAssigned: "not assigned",
     titles: {
         colony: "Colony",
-        calendar: "Calendar",
+        planner: "Planner",
         characters: "Characters",
         hero: "Hero",
         link: "Link",

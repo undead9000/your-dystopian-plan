@@ -9,7 +9,7 @@ export const uk = {
     noFactions: "Немає активних фракцій",
     titles: {
         colony: "Колонія",
-        calendar: "Календар",
+        planner: "Планувальник",
         characters: "Персоналії",
         hero: "Герой",
         link: "Зв'язок",

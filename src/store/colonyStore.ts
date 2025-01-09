@@ -1,13 +1,11 @@
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
-import { Colony, Faction, Character, GovernmentPosition, MonthDays } from '../models'
-import { CharacterRawData, FactionRawData } from '../models/'
-import { type RelationType } from '../models'
+import { reactive, toRaw } from 'vue'
+import { Colony, Faction, Character, GovernmentPosition, MonthDays, Action, CharacterRawData, FactionRawData, RelationRawData } from '../models'
+import { type RelationType, type FactionIdType } from '../models'
 import scenarioData from "../assets/scenario.json"
 
 export const useColonyStore = defineStore('singleColonyStore', () => {
     const initColonyData = scenarioData.colonyData
-    const initFactionsData = initFactions(scenarioData.factionsData)
     const initCharactersData = scenarioData.charactersData
     const factionPositionsDictionary = setupSturctureMap(initColonyData.factionPositions)
     const governmentPositionsDictionary = setupSturctureMap(initColonyData.governmentPositions)
@@ -16,17 +14,20 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         colony: null as Colony | null,
     })
 
+    //TODO: Add param for init()
     function init() {
+      const initFactionsData = initFactions(scenarioData.factionsData, scenarioData.charactersData)
       const initialCharacters = mapCharactersData(initFactionsData, initCharactersData)
 
       state.colony = {
         id: initColonyData.id,
-        currentDate: setInitDate(),
+        currentDate: initDate(),
         quests: scenarioData.questsData,
-        factions: bindCharactersToFactions(initFactionsData, initialCharacters),
+        factions: initFactionsData,
         characters: initialCharacters,
         government: assingCharactersToGovernment(initColonyData.governmentStructure, initColonyData.governmentName, initialCharacters),
-        hero: initHero()
+        hero: initHero(),
+        actions: []
       }
     }
 
@@ -44,20 +45,38 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       }
     }
 
-    function initFactions(factions: Array<FactionRawData>) {
-      return factions.map(faction => ({
-        ...faction,
-        relations: faction.relations
-          ? faction.relations.map(relation => ({
-            ...relation,
-            type: relation.type as RelationType,
-            targetId: relation.targetId
-          }))
-          : null
-      }))
+    function initFactions(factions: Array<FactionRawData>, characters: Array<CharacterRawData>) {
+      const result = factions.map(faction => new Faction(
+        faction.id,
+        faction.name,
+        faction.description,
+        faction.active,
+        faction.political,
+        initFactionMembers(faction.id, characters),
+        initFactionRelations(faction.relations)
+      ))
+
+      return result
     }
 
-    function setInitDate() {
+    function initFactionMembers(factionId: string, characters: Array<CharacterRawData>) {
+      const filteredCharacters = characters.filter(character => character.factionId === factionId) ?? []
+      return filteredCharacters.length 
+        ? filteredCharacters.map(character => character.id)
+        : null
+    }
+
+    function initFactionRelations(relations: Array<RelationRawData> | null) {
+      return relations 
+        ? relations.map(relation => ({
+          ...relation,
+          type: relation.type as RelationType,
+          targetId: relation.targetId
+        }))
+        : null
+    }
+
+    function initDate() {
       return new Date(Date.UTC(initColonyData.currentYear, 0, 1, 0, 0))
     }
 
@@ -103,14 +122,6 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       } 
     }
 
-    function bindCharactersToFactions(factions: Array<Faction>, characters: Array<Character>) {
-      const factionsWithCharacters = factions.map(faction => ({
-        ...faction,
-        members: characters.filter(character => character.factionId === faction.id).map(character => character.id) ?? null
-      }))
-      return factionsWithCharacters
-    }
-
     function findFactionsById(factions: Array<Faction>, id: string | null) {
       if(!id) return undefined
 
@@ -131,8 +142,23 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
     function nextTurn() {
       if(!state.colony) return
 
+      if(state.colony.actions.length) {
+        state.colony.actions.forEach(action => action?.callback())
+        state.colony.actions = []
+      }
+
       const date = new Date(state.colony.currentDate)
       state.colony.currentDate = new Date(date.setMonth(date.getMonth() + 1))
+    }
+
+    function addAction(actionId: string, factionId: FactionIdType | null) {
+      if(!factionId || !state.colony?.factions || !state.colony.actions) return
+
+      const targetFaction = toRaw(state.colony.factions.find(faction => faction.id === factionId))
+      if(targetFaction) {
+        const action = new Action(actionId, "FractionCharacter", 1, 0, () => targetFaction.updateRelations('hero'))
+        state.colony.actions.push(action)
+      }
     }
 
     function getRelatedQuests() {
@@ -246,5 +272,6 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         getFactionCharacters,
         getCharacterById,
         getCurrentMonthDays,
+        addAction
     }
 })

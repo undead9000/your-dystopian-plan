@@ -3,7 +3,7 @@
         <h3>{{ t('titles.hero') }}</h3>
         <ul v-if="factionsRelations.length" class="hero-view-list">
             <li v-for="faction in factionsRelations">
-                {{ faction.name }}{{ t('hero.factionRelationToHero') }}: {{ faction.relations ? faction.relations[0].value : '0' }}
+                {{ faction.name }}{{ t('hero.factionRelationToHero') }}: {{ faction.relations?.filter(relation => relation.targetId === 'hero')[0].value }}
             </li>
         </ul>
         <p v-else>{{ t('noFactions') }}</p>

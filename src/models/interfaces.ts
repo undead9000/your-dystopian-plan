@@ -7,10 +7,10 @@ export interface FactionRawData {
     active: boolean,
     political: boolean,
     members: Array<string> | null,
-    relations: Array<RelationRaw> | null
+    relations: Array<RelationRawData> | null
 }
 
-export interface RelationRaw {
+export interface RelationRawData {
     type: string,
     targetId: string,
     value: number
