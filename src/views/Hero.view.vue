@@ -3,7 +3,7 @@
         <h3>{{ t('titles.hero') }}</h3>
         <ul v-if="factionsRelations" class="hero-view-list">
             <li v-for="[faction, relations] in factionsRelations">
-                {{ faction.name }}{{ t('hero.factionRelationToHero') }}: {{ relations?.find(relation => relation.targetId === 'hero')?.value ?? 'N/A' }}
+                {{ faction.name }}{{ t('hero.factionRelationToHero') }}: {{ heroFactionRelations(relations) }}
             </li>
         </ul>
         <p v-else>{{ t('noFactions') }}</p>
@@ -11,20 +11,20 @@
 </template>
 
 <script setup lang="ts">
-
-import { computed, watch, ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
+import { type FactionsRelationsType, Relation } from '../models'
 import { useColonyStore } from "../store/colonyStore"
 
 const singleColonyStore = useColonyStore()
 const { t } = useI18n()
-const factionsRelations = ref() 
-
-factionsRelations.value = singleColonyStore.getActiveFactionsRelations()
+const factionsRelations = ref<FactionsRelationsType | null>(null) 
 const actions = computed(() => singleColonyStore.state.colony?.actions)
+const heroFactionRelations = (relations: Relation[] | null) => { return relations?.find(relation => relation.targetId === 'hero')?.value ?? 'N/A' }
 
 watch(
     () => actions.value,
-    () => factionsRelations.value = singleColonyStore.getActiveFactionsRelations()
+    () => factionsRelations.value = singleColonyStore.getActiveFactionsRelations(),
+    { immediate: true }
 )
 </script>

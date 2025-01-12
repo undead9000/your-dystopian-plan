@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, toRaw } from 'vue'
 import { Colony, Faction, Character, GovernmentPosition, MonthDays, Action, CharacterRawData, FactionRawData, RelationRawData } from '../models'
-import { type RelationType, type FactionIdType } from '../models'
+import { type RelationType, type FactionIdType, type FactionsRelationsType } from '../models'
 import scenarioData from "../assets/scenario.json"
 
 export const useColonyStore = defineStore('singleColonyStore', () => {
@@ -143,7 +143,7 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       if(!state.colony) return
 
       if(state.colony.actions.length) {
-        state.colony.actions.forEach(action => action?.callback())
+        state.colony.actions.forEach(action => action.callback())
         state.colony.actions = []
       }
 
@@ -184,7 +184,7 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
       return state.colony.factions.filter(item => item.active)
     }
 
-    function getActiveFactionsRelations() {
+    function getActiveFactionsRelations(): FactionsRelationsType | null {
       if(!state.colony?.factions) return null
 
       const activeFactions = getActiveFactions()

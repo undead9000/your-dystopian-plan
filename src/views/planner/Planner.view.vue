@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useColonyStore } from "../../store/colonyStore"
 import { MonthDays } from '../../models'
@@ -48,6 +48,10 @@ const days = computed(() => singleColonyStore.getCurrentMonthDays())
 const factions = computed(() => singleColonyStore.getActiveFactions())
 const isActive = (day: MonthDays) => day.date.getMonth() !== singleColonyStore.state.colony?.currentDate.getMonth()
 
+watch(
+    () => singleColonyStore.state.colony?.currentDate,
+    () => currentFactionId.value = null
+)
 </script>
 
 <style lang="scss">

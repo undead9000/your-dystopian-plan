@@ -43,7 +43,6 @@ export class Faction {
     this.relations = relations
   }
 
-  //TODO: add calling this method from stack
   updateRelations(targetId: string) {
     if(!this.relations) return
 
