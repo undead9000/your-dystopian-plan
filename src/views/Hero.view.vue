@@ -15,15 +15,17 @@ import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { type FactionsRelationsType, Relation } from '../models'
 import { useColonyStore } from "../store/colonyStore"
+import { useLoopStore } from '../store/loopStore';
 
 const singleColonyStore = useColonyStore()
+const loopStore = useLoopStore()
+
 const { t } = useI18n()
 const factionsRelations = ref<FactionsRelationsType | null>(null) 
-const actions = computed(() => singleColonyStore.state.colony?.actions)
 const heroFactionRelations = (relations: Relation[] | null) => { return relations?.find(relation => relation.targetId === 'hero')?.value ?? 'N/A' }
 
 watch(
-    () => actions.value,
+    () => loopStore.state.actions.size,
     () => factionsRelations.value = singleColonyStore.getActiveFactionsRelations(),
     { immediate: true }
 )

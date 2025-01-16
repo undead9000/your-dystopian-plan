@@ -35,7 +35,7 @@
     ],
     "factionsData": [
         {
-            "id": "0",
+            "id": "1",
             "name": "Agrarian faction",
             "description": "Leave us alone",
             "political": false,
@@ -44,7 +44,7 @@
             "relations": null
         },
         {
-            "id": "1",
+            "id": "2",
             "name": "Progressive faction",
             "description": "Science or death",
             "political": true,
@@ -57,7 +57,7 @@
             }]
         },
         {
-            "id": "2",
+            "id": "3",
             "name": "Business faction",
             "description": "Do money, that's all",
             "political": true,
@@ -77,7 +77,7 @@
             ]
         },
         {
-            "id": "3",
+            "id": "4",
             "name": "Workers faction",
             "description": "Time to strike",
             "political": true,

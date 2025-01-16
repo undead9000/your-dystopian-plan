@@ -11,7 +11,6 @@ export class Colony {
     public characters: Array<Character> | null,
     public government: Government | null,
     public hero: Character,
-    public actions: Array<Action>
   ){}
 }
 
@@ -42,19 +41,6 @@ export class Faction {
     this.members = members,
     this.relations = relations
   }
-
-  updateRelations(targetId: string) {
-    if(!this.relations) return
-
-    const relation = this.relations.find(relation => relation.targetId === targetId)
-    relation 
-      ? relation.value += 0.01
-      : this.relations.push({
-        type: "FractionCharacter",
-        targetId: targetId,
-        value: 0
-      })
-  }
 }
 
 //TODO: implement multifraction binding
@@ -68,7 +54,8 @@ export class Character {
     public factionPositionKey: string | null,
     public factionPositionName: string | null,
     public governmentPositionKey: string | null,
-    public governmentPositionName: string | null
+    public governmentPositionName: string | null,
+    public relations: Array<Relation> | null
   ){}
 }
 
@@ -79,12 +66,15 @@ export class Government {
   ){}
 }
 
-export class Action {
-  constructor(
-    public id: string,
-    public type: string,
-    public value: number,
-    public priority: number,
-    public callback: Function
-  ) {}
-}
+//TODO: add date interval
+//TODO: batch of actions
+// export class Action {
+//   constructor(
+//     public id: string,
+//     public ownerId: FactionIdType | CharacterIdType,
+//     public type: string,
+//     public value: number,
+//     public priority: number,
+//     public callback: Function
+//   ) {}
+// }

@@ -36,8 +36,9 @@ export const en_US = {
     },
     planner: {
         selectActionFor: "Select action for",
-        defaultOptionName: "Select Action",
-        improveRelationships: "Improve relationships with"
+        defaultOptionName: "Select action",
+        improveRelationships: "Improve relationships with",
+        dayNotSelected: "Day is not selected"
     },
     calendar: {
         monday: "Monday",

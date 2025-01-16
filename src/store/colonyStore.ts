@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, toRaw } from 'vue'
-import { Colony, Faction, Character, GovernmentPosition, MonthDays, Action, CharacterRawData, FactionRawData, RelationRawData } from '../models'
+import { useLoopStore } from './loopStore'
+import { Colony, Faction, Character, GovernmentPosition, MonthDays, CharacterRawData, FactionRawData, RelationRawData } from '../models'
 import { type RelationType, type FactionIdType, type FactionsRelationsType } from '../models'
 import scenarioData from "../assets/scenario.json"
 
@@ -9,6 +10,7 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
     const initCharactersData = scenarioData.charactersData
     const factionPositionsDictionary = setupSturctureMap(initColonyData.factionPositions)
     const governmentPositionsDictionary = setupSturctureMap(initColonyData.governmentPositions)
+    const loopStore = useLoopStore()
 
     const state = reactive({
         colony: null as Colony | null,
@@ -27,7 +29,6 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         characters: initialCharacters,
         government: assingCharactersToGovernment(initColonyData.governmentStructure, initColonyData.governmentName, initialCharacters),
         hero: initHero(),
-        actions: []
       }
     }
 
@@ -36,12 +37,13 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         id: "hero",
         name: "Earth's consul",
         alive: true,
-        factionId :null,
-        factionPositionKey :null,
-        governmentPositionKey :null,
-        faction :null,
-        factionPositionName :null,
-        governmentPositionName :null
+        factionId: null,
+        factionPositionKey: null,
+        governmentPositionKey: null,
+        faction: null,
+        factionPositionName: null,
+        governmentPositionName: null,
+        relations: null
       }
     }
 
@@ -135,36 +137,30 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
         factionPositionKey: character.factionPosition ? character.factionPosition : null,
         factionPositionName: character.factionPosition ? getFactionPositionTitleByKey(character.factionPosition) : null,
         governmentPositionKey: character.governmentPosition ? character.governmentPosition : null,
-        governmentPositionName: character.governmentPosition ? getGovernmentPositionTitleByKey(character.governmentPosition) : null
+        governmentPositionName: character.governmentPosition ? getGovernmentPositionTitleByKey(character.governmentPosition) : null,
+        relations: null
       }))
     }
 
     function nextTurn() {
       if(!state.colony) return
 
-      if(state.colony.actions.length) {
-        state.colony.actions.forEach(action => action.callback())
-        state.colony.actions = []
-      }
-
+      loopStore.executeActions()
       const date = new Date(state.colony.currentDate)
       state.colony.currentDate = new Date(date.setMonth(date.getMonth() + 1))
     }
 
-    function addAction(actionId: string, factionId: FactionIdType | null) {
-      if(!factionId || !state.colony?.factions || !state.colony.actions) return
+    function addAction(factionId: FactionIdType | null, currentDate: number) {
+      if(!factionId || !state.colony?.factions) return
 
-      const targetFaction = toRaw(state.colony.factions.find(faction => faction.id === factionId))
-      if(targetFaction) {
-        const action = new Action(actionId, "FractionCharacter", 1, 0, () => targetFaction.updateRelations('hero'))
-        state.colony.actions.push(action)
-      }
+      const targetFaction = state.colony.factions.find(faction => faction.id === factionId)
+      if(targetFaction) loopStore.addAction(toRaw(targetFaction), toRaw(state.colony.hero), 0.01, currentDate)
     }
 
     function isActionsEmpty() {
-      if(!state.colony?.actions) return
+      if(!loopStore.state.actions) return
 
-      return !!state.colony?.actions.length
+      return !!loopStore.state.actions.size
     }
 
     function getRelatedQuests() {
@@ -277,18 +273,18 @@ export const useColonyStore = defineStore('singleColonyStore', () => {
     }
 
     return {
-        state,
-        init,
-        getCurrentDateFormat,
-        nextTurn,
-        getRelatedQuests,
-        getActiveFactions,
-        getActiveFactionsRelations,
-        getFactionDetails,
-        getFactionCharacters,
-        getCharacterById,
-        getCurrentMonthDays,
-        addAction,
-        isActionsEmpty
+      state,
+      init,
+      getCurrentDateFormat,
+      nextTurn,
+      getRelatedQuests,
+      getActiveFactions,
+      getActiveFactionsRelations,
+      getFactionDetails,
+      getFactionCharacters,
+      getCharacterById,
+      getCurrentMonthDays,
+      addAction,
+      isActionsEmpty
     }
 })

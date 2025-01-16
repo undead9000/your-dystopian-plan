@@ -25,5 +25,19 @@ export const uk = {
         factionName: "Назва фракції",
         factionMotto: "Гасло",
         factionMembers: "Члени фракції"
-    }
+    },
+    planner: {
+        selectActionFor: "Виберіть дію на",
+        defaultOptionName: "Обрати дію",
+        improveRelationships: "Покращити стосунки з"
+    },
+    calendar: {
+        monday: "Понеділок",
+        tuesday: "Вівторок",
+        wednesday: "Середа",
+        thursday: "Четвер",
+        friday: "П'ятниця",
+        saturday: "Субота",
+        sunday: "Неділя"
+    },
 }

@@ -1,30 +1,44 @@
 <template>
     <div class="planner-view">
-        <h3>{{ currentMonthTitle }}</h3>
-        <ul v-if="days" class="planner-calendar">
-            <li class="title">{{ t('calendar.monday') }}</li>
-            <li class="title">{{ t('calendar.tuesday') }}</li>
-            <li class="title">{{ t('calendar.wednesday') }}</li>
-            <li class="title">{{ t('calendar.thursday') }}</li>
-            <li class="title">{{ t('calendar.friday') }}</li>
-            <li class="title">{{ t('calendar.saturday') }}</li>
-            <li class="title">{{ t('calendar.sunday') }}</li>
-            <li 
-                v-for="day in days" 
-                :class="isActive(day) ? 'inactive' : ''"
-            > 
-                {{ day.day }}
-            </li>
-        </ul>
-        <div v-if="factions" class="planner-actions">
-            <h3>{{ t('planner.selectActionFor') }} {{ currentMonthTitle }}:</h3>
-            <select v-model="currentFactionId" @change="singleColonyStore.addAction('', currentFactionId ?? null)">
-                <option disabled value>{{ t('planner.defaultOptionName') }}</option>
-                <option v-for="faction in factions" :value="faction.id">
-                    {{ t('planner.improveRelationships') }} {{ faction.name }}
-                </option>
-            </select>
-        </div>
+        <h3>{{ title }}</h3>
+        <div class="planner-view-container">  
+            <div class="planner-selected">
+                <div v-if="selectedDay">
+                    <div class="planner-selected-header">
+                        <span>{{ selectedDay.day }} {{ currentMonth }}, {{ selectedDay.weekdayName }}</span>
+                    </div>
+                    <select v-model="selectedFactionId" @change="onChange()" :disabled="!isActive(selectedDay)">
+                        <option disabled value="0">{{ t('planner.defaultOptionName') }}</option>
+                        <option v-for="faction in factions" :value="faction.id">
+                            {{ faction.name }} +
+                        </option>
+                    </select>
+
+                    <div v-if="isActionSettled(selectedDay)">
+                        <div><a href="/">Repeat until end</a></div>
+                        <div><a href="/">Repeat from start</a></div>
+                        <div><a href="/">Set all week</a></div>
+                    </div>
+                </div>
+                <div v-else>{{ t('planner.dayNotSelected') }}</div>
+            </div>
+
+            <div v-if="currentMonthDays" class="planner-calendar">
+                <div class="planner-calendar-day" v-for="day in daysOfWeekEnum">{{ t('calendar.' + day) }}</div>
+                <div 
+                    v-for="current in currentMonthDays" 
+                    class="planner-calendar-block"
+                    :class="!isActive(current) ? 'inactive' : ''"
+                    @click="onSelectDay(current)"
+                > 
+                    <div v-if="current" class="planner-calendar-wrapper">
+                        {{ current.day }}
+
+                        <div v-if="isActionSettled(current)" class="planner-calendar-action" />
+                    </div>
+                </div>
+            </div>
+        </div>    
     </div>
 </template>
 
@@ -32,45 +46,93 @@
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useColonyStore } from "../../store/colonyStore"
+import { useLoopStore } from '../../store/loopStore';
+import { daysOfWeekEnum } from '../../helpers'
 import { MonthDays } from '../../models'
 
 const singleColonyStore = useColonyStore()
+const loopStore = useLoopStore()
+
 const { t } = useI18n()
-const options = {
-    month: 'long',
-    year: 'numeric'
-} as Intl.DateTimeFormatOptions
+const options = { month: 'long', year: 'numeric' } as Intl.DateTimeFormatOptions
 
-const currentFactionId = ref<string | null>(null)
+const selectedFactionId = ref<string | null>("0")
+const selectedDay = ref<MonthDays | null>(null)
 
-const currentMonthTitle = computed(() => singleColonyStore.state.colony?.currentDate.toLocaleDateString('en', options))
-const days = computed(() => singleColonyStore.getCurrentMonthDays())
+const title = computed(() => singleColonyStore.state.colony?.currentDate.toLocaleDateString('en', options))
+const currentMonthDays = computed(() => singleColonyStore.getCurrentMonthDays())
+const currentMonth = computed(() => singleColonyStore.state.colony?.currentDate.toLocaleDateString('en', {month: 'long'}))
 const factions = computed(() => singleColonyStore.getActiveFactions())
-const isActive = (day: MonthDays) => day.date.getMonth() !== singleColonyStore.state.colony?.currentDate.getMonth()
+
+const isActive = (day: MonthDays) => day.date.getMonth() === singleColonyStore.state.colony?.currentDate.getMonth()
+const isActionSettled = (day: MonthDays) => (loopStore.state.actions.get(day.day) && isActive(day))
+
+function onSelectDay(day: MonthDays) {
+    if(!isActive(day)) return 
+
+    const selectedDayAction = loopStore.state.actions.get(day.day)
+    selectedFactionId.value = selectedDayAction ? selectedDayAction.ownerId : '0'
+    selectedDay.value = day
+}
+
+function onChange() {
+    if(!selectedDay.value) return
+
+    singleColonyStore.addAction(selectedFactionId.value ?? null, selectedDay.value.day)
+}
 
 watch(
     () => singleColonyStore.state.colony?.currentDate,
-    () => currentFactionId.value = null
+    () => selectedFactionId.value = null
 )
 </script>
 
 <style lang="scss">
+.planner-view-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+}
+.planner-selected {
+    min-height: 240px;
+    width: 20%;
+    border: 1px solid #eee;
+    padding: 16px;
+    box-sizing: border-box;
+}
+.planner-selected-header {
+    margin: 0 0 8px;
+}
 .planner-calendar {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(7, minmax(auto, max-content));
+    gap: 12px;
+}
+.planner-calendar-day {
+    font-size: 14px;
+}
+.planner-calendar-block {
+    cursor: pointer;
 
-    li {
-        padding: 6px 8px;
-        border-top: 1px solid #eee;
-
-        &.title {
-            border: none;
-        }
-
-        &.inactive {
-            color: #aaa;
-        }
+    &.inactive {
+        cursor: not-allowed;
+        color: #aaa;
     }
+}
+.planner-calendar-wrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border: 1px solid #eee;
+    padding: 8px;
+    box-sizing: border-box;
+}
+.planner-calendar-action {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    bottom: 8px;
+    right: 8px;
+    border: 1px solid #eee;
 }
 </style>
