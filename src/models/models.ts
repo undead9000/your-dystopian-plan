@@ -6,11 +6,11 @@ export class Colony {
   constructor(
     public id: string,
     public currentDate: Date,
-    public quests: Array<Quest> | null,
-    public factions: Array<Faction> | null,
-    public characters: Array<Character> | null,
+    //public quests: Array<Quest> | null,
+    //public factions: Array<Faction> | null,
+    //public characters: Array<Character> | null,
     public government: Government | null,
-    public hero: Character,
+    //public hero: Character,
   ){}
 }
 
