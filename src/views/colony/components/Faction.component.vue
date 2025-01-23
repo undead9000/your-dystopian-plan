@@ -33,19 +33,19 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useI18n } from 'vue-i18n'
-import { useColonyStore } from "../../../store/colonyStore"
+import { useGameStore } from "../../../store/"
 import { Faction, Character } from '../../../models/models'
 
-const singleColonyStore = useColonyStore()
+const gameStore = useGameStore()
 const { t } = useI18n()
 
-const factions = computed(() => singleColonyStore.getActiveFactions())
+const factions = computed(() => gameStore.getActiveFactions())
 const currentFaction = ref<Faction | null>(null)
 const currentFactionMembers = ref<Array<Character> | null>(null)
 
 function showFactionDetails(id: string) {
-    currentFaction.value = singleColonyStore.getFactionDetails(id)
-    currentFactionMembers.value = singleColonyStore.getFactionCharacters(id)
+    currentFaction.value = gameStore.getFactionDetails(id)
+    currentFactionMembers.value = gameStore.getFactionCharacters(id)
 }
 </script>
 
