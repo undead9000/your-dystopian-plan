@@ -1,85 +1,17 @@
 import { defineStore } from 'pinia'
 import { reactive, toRaw } from 'vue'
-import { Faction, Character, GovernmentPosition, MonthDays, ColonyRawData, CharacterRawData, FactionRawData, RelationRawData } from '../models'
-import { type RelationType, type FactionsRelationsType } from '../models'
-import scenarioData from "../assets/scenario.json"
+import { Game, MonthDays } from '../models'
+import { type FactionsRelationsType } from '../models'
 
 export const useGameStore = defineStore('gameStore', () => {
-  const factionPositionsDictionary = setupSturctureMap(scenarioData.colonyData.factionPositions)
-  const governmentPositionsDictionary = setupSturctureMap(scenarioData.colonyData.governmentPositions)
+  const state = reactive(new Game())
 
-  const state = reactive(init())
-
-  //TODO: Add param for init()
-  function init() {
-    const factionsData = initFactions(scenarioData.factionsData, scenarioData.charactersData)
-    const charactersData = mapCharactersData(factionsData, scenarioData.charactersData)
-
-    return {
-      colony: initColony(scenarioData.colonyData, charactersData),
-      quests: scenarioData.questsData,
-      factions: factionsData,
-      characters: charactersData,
-      hero: initHero(),
-    }
-  }
-
-  function initColony(colonyData: ColonyRawData, characters: Character[]) {
-    return {
-      id: colonyData.id,
-      currentDate: initDate(colonyData.currentYear),
-      government: assingCharactersToGovernment(colonyData.governmentStructure, colonyData.governmentName, characters),
-    }
-  }
-
-  function initHero() {
-    return {
-      id: "hero",
-      name: "Earth's consul",
-      alive: true,
-      factionId: null,
-      factionPositionKey: null,
-      governmentPositionKey: null,
-      faction: null,
-      factionPositionName: null,
-      governmentPositionName: null,
-      relations: null
-    }
-  }
-
-  function initFactions(factions: Array<FactionRawData>, characters: Array<CharacterRawData>) {
-    const result = factions.map(faction => new Faction(
-      faction.id,
-      faction.name,
-      faction.description,
-      faction.active,
-      faction.political,
-      initFactionMembers(faction.id, characters),
-      initFactionRelations(faction.relations)
-    ))
-
-    return result
-  }
-
-  function initFactionMembers(factionId: string, characters: Array<CharacterRawData>) {
-    const filteredCharacters = characters.filter(character => character.factionId === factionId) ?? []
-    return filteredCharacters.length 
-      ? filteredCharacters.map(character => character.id)
-      : null
-  }
-
-  function initFactionRelations(relations: Array<RelationRawData> | null) {
-    return relations 
-      ? relations.map(relation => ({
-        ...relation,
-        type: relation.type as RelationType,
-        targetId: relation.targetId
-      }))
-      : null
-  }
-
-  function initDate(year: number) {
-    return new Date(Date.UTC(year, 0, 1, 0, 0))
+  function init(game: Game) {
+    state.colony = game.colony
+    state.quests = game.quests
+    state.factions = game.factions
+    state.characters = game.characters
+    state.hero = game.hero
   }
 
   function getCurrentDateFormat() {
@@ -94,63 +26,11 @@ export const useGameStore = defineStore('gameStore', () => {
     return state.colony?.currentDate.toLocaleDateString('en', options)
   }
 
-  function assingCharactersToGovernment(initialStructure: string[], name: string, characters: Array<Character>) {
-    const structure = setInitialGovernmentStructure(initialStructure, name)
-    const assignedIntoGovernment = characters.filter(character => character.governmentPositionKey)
-
-    structure.positions = structure.positions.map(position => {
-      const employee = assignedIntoGovernment.find(character => character.governmentPositionKey === position.positionKey)
-      const index = assignedIntoGovernment.findIndex(character => character.governmentPositionKey === position.positionKey)
-      if(employee) assignedIntoGovernment.splice(index, 1)
-
-      return {
-        positionKey: position.positionKey,
-        positionName: getGovernmentPositionTitleByKey(position.positionKey),
-        responsibleId: employee ? employee.id : null
-      }
-    })
-
-    return structure
-  }
-
-  function setInitialGovernmentStructure(initialStructure: string[], name: string) {
-    return {
-      name: name,
-      positions: initialStructure.map(position => ({
-        positionKey: position,
-        positionName: position,
-        responsibleId: null
-      } as GovernmentPosition))
-    } 
-  }
-
-  function findFactionsById(factions: Array<Faction>, id: string | null) {
-    if(!id) return undefined
-
-    return factions.find(faction => faction.id === id)
-  }
-
-  function mapCharactersData(factions: Array<Faction>, characters: Array<CharacterRawData>) {
-    return characters.map(character => ({
-      ...character,
-      faction: findFactionsById(factions, character.factionId) ?? null,
-      factionPositionKey: character.factionPosition ? character.factionPosition : null,
-      factionPositionName: character.factionPosition ? getFactionPositionTitleByKey(character.factionPosition) : null,
-      governmentPositionKey: character.governmentPosition ? character.governmentPosition : null,
-      governmentPositionName: character.governmentPosition ? getGovernmentPositionTitleByKey(character.governmentPosition) : null,
-      relations: null
-    }))
-  }
-
   function getRelatedQuests() {
     if(!state.quests) return []
 
     const currentYear = state.colony.currentDate.getFullYear()
     return state.quests.filter(item => item.startYear <= currentYear && item.endYear > currentYear) ?? []
-  }
-
-  function setupSturctureMap(dictionary: Record<string, any>[]) {
-    return new Map(dictionary.map(position => [Object.keys(position)[0], Object.values(position)[0]]))
   }
 
   function getActiveFactions() {
@@ -184,14 +64,6 @@ export const useGameStore = defineStore('gameStore', () => {
     if(!state.characters) return null
 
     return state.characters.find(character => character.id === characterId) ?? null
-  }
-
-  function getFactionPositionTitleByKey(key: string) {
-    return factionPositionsDictionary.get(key)
-  }
-
-  function getGovernmentPositionTitleByKey(key: string) {
-    return governmentPositionsDictionary.get(key)
   }
 
   function getCurrentMonthDays() {
