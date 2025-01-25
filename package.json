@@ -50,6 +50,7 @@
     }
   },
   "dependencies": {
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
     "vue": "^3.2.25",
     "vue-i18n": "^9.14.2"
   },
