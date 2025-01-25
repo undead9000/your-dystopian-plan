@@ -9,10 +9,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from 'vue-i18n'
-import { useColonyStore } from "../../../store/colonyStore"
+import { useGameStore } from "../../../store/"
 
-const singleColonyStore = useColonyStore()
+const gameStore = useGameStore()
 const { t } = useI18n()
 
-const questTitles = computed(() => singleColonyStore.getRelatedQuests().map(quest => quest.title))
+const questTitles = computed(() => gameStore.getRelatedQuests().map(quest => quest.title))
 </script>

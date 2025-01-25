@@ -45,12 +45,11 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
-import { useColonyStore } from "../../store/colonyStore"
-import { useLoopStore } from '../../store/loopStore';
+import { useGameStore, useLoopStore } from "../../store/"
 import { daysOfWeekEnum } from '../../helpers'
 import { MonthDays } from '../../models'
 
-const singleColonyStore = useColonyStore()
+const gameStore = useGameStore()
 const loopStore = useLoopStore()
 
 const { t } = useI18n()
@@ -59,12 +58,12 @@ const options = { month: 'long', year: 'numeric' } as Intl.DateTimeFormatOptions
 const selectedFactionId = ref<string | null>("0")
 const selectedDay = ref<MonthDays | null>(null)
 
-const title = computed(() => singleColonyStore.state.colony?.currentDate.toLocaleDateString('en', options))
-const currentMonthDays = computed(() => singleColonyStore.getCurrentMonthDays())
-const currentMonth = computed(() => singleColonyStore.state.colony?.currentDate.toLocaleDateString('en', {month: 'long'}))
-const factions = computed(() => singleColonyStore.getActiveFactions())
+const title = computed(() => gameStore.state.colony.currentDate.toLocaleDateString('en', options))
+const currentMonthDays = computed(() => gameStore.getCurrentMonthDays())
+const currentMonth = computed(() => gameStore.state.colony.currentDate.toLocaleDateString('en', {month: 'long'}))
+const factions = computed(() => gameStore.getActiveFactions())
 
-const isActive = (day: MonthDays) => day.date.getMonth() === singleColonyStore.state.colony?.currentDate.getMonth()
+const isActive = (day: MonthDays) => day.date.getMonth() === gameStore.state.colony.currentDate.getMonth()
 const isActionSettled = (day: MonthDays) => (loopStore.state.actions.get(day.day) && isActive(day))
 
 function onSelectDay(day: MonthDays) {
@@ -78,11 +77,11 @@ function onSelectDay(day: MonthDays) {
 function onChange() {
     if(!selectedDay.value) return
 
-    singleColonyStore.addAction(selectedFactionId.value ?? null, selectedDay.value.day)
+    loopStore.updateActionsStack(selectedFactionId.value ?? null, selectedDay.value.day)
 }
 
 watch(
-    () => singleColonyStore.state.colony?.currentDate,
+    () => gameStore.state.colony.currentDate,
     () => selectedFactionId.value = null
 )
 </script>

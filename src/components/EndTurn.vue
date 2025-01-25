@@ -1,22 +1,23 @@
 <template>
     <div class="end-turn">
-        <div>{{ t('currentDate') }}: {{ singleColonyStore.getCurrentDateFormat() }}</div>
+        <div>{{ t('currentDate') }}: {{ gameStore.getCurrentDateFormat() }}</div>
         <button class="end-turn-button" @click="endTurnHandler()">{{ t('nextTurn') }}</button>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useColonyStore } from "../store/colonyStore"
+import { useGameStore, useLoopStore } from "../store/"
 
-const singleColonyStore = useColonyStore()
+const gameStore = useGameStore()
+const loopStore = useLoopStore()
 const { t } = useI18n()
 
 function endTurnHandler() {
-    singleColonyStore.isActionsEmpty()
-        ? singleColonyStore.nextTurn()
+    loopStore.isActionsStackEmpty()
+        ? loopStore.executeActions()
         : confirm(t('emptyActionsQueueConfirm'))
-            ? singleColonyStore.nextTurn()
+            ? loopStore.executeActions()
             : false
 }
 </script>

@@ -2,24 +2,36 @@ import { type FactionIdType, type CharacterIdType } from './types'
 import { GovernmentPosition, Relation } from './interfaces'
 //import { FactionRawData } from '../models'
 
+export class Game {
+  colony: Colony
+  quests: Quest[]
+  factions: Faction[]
+  characters: Character[]
+  hero: Character
+
+  constructor() {
+    this.colony = new Colony()
+    this.quests = []
+    this.factions = []
+    this.characters = []
+    this.hero = new Character()
+  }
+}
+
 export class Colony {
   constructor(
-    public id: string,
-    public currentDate: Date,
-    public quests: Array<Quest> | null,
-    public factions: Array<Faction> | null,
-    public characters: Array<Character> | null,
-    public government: Government | null,
-    public hero: Character,
-  ){}
+    public id: string = '',
+    public currentDate: Date = new Date(),
+    public government: Government | null = null,
+  ) {}
 }
 
 export class Quest {
   constructor(
-      public id: string,
-      public startYear: number,
-      public endYear: number,
-      public title: string
+      public id: string = '0',
+      public startYear: number = 0,
+      public endYear: number = 0,
+      public title: string = ''
   ){}
 }
 
@@ -46,16 +58,16 @@ export class Faction {
 //TODO: implement multifraction binding
 export class Character {
   constructor(
-    public id: CharacterIdType,
-    public name: string,
-    public alive: boolean,
-    public factionId: string | null,
-    public faction: Faction | null,
-    public factionPositionKey: string | null,
-    public factionPositionName: string | null,
-    public governmentPositionKey: string | null,
-    public governmentPositionName: string | null,
-    public relations: Array<Relation> | null
+    public id: CharacterIdType = '',
+    public name: string = '',
+    public alive: boolean = true,
+    public factionId: string | null = null,
+    public faction: Faction | null = null,
+    public factionPositionKey: string | null = null,
+    public factionPositionName: string | null = null,
+    public governmentPositionKey: string | null = null,
+    public governmentPositionName: string | null = null,
+    public relations: Array<Relation> | null = null
   ){}
 }
 

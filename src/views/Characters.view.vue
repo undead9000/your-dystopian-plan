@@ -22,12 +22,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n'
-import { useColonyStore } from "../store/colonyStore"
+import { useGameStore } from "../store/"
 
-const singleColonyStore = useColonyStore()
+const gameStore = useGameStore()
 const { t } = useI18n()
 
-const characters = computed(() => singleColonyStore.state.colony ? singleColonyStore.state.colony.characters : [])
+const characters = computed(() => gameStore.state.colony ? gameStore.state.characters : [])
 </script>
 
 <style lang="scss">

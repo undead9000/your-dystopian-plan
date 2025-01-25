@@ -1,5 +1,19 @@
 import { type FactionIdType, type CharacterIdType, type RelationType } from './types'
 
+export interface ColonyRawData {
+    id: string,
+    currentYear: number,
+    governmentName: string,
+    governmentStructure: Array<string>,
+    governmentPositions: Record<string, string | undefined>[],
+    factionStructure: Array<string>,
+    factionPositions: Record<string, string>[],
+}
+
+interface Position {
+    [key: string]: string;
+}
+
 export interface FactionRawData {
     id: string,
     name: string,
