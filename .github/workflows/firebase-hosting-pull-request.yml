@@ -14,6 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run app:build
+      - env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+          PUBLISH_SNAP: never
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
