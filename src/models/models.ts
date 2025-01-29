@@ -1,6 +1,5 @@
-import { type FactionIdType, type CharacterIdType } from './types'
+import type { FactionIdType, CharacterIdType, ColonyIdType } from './types'
 import { GovernmentPosition, Relation } from './interfaces'
-//import { FactionRawData } from '../models'
 
 export class Game {
   colony: Colony
@@ -23,6 +22,7 @@ export class Colony {
     public id: string = '',
     public currentDate: Date = new Date(),
     public government: Government | null = null,
+    public relations: Array<Relation> | null = null
   ) {}
 }
 
@@ -73,8 +73,10 @@ export class Character {
 
 export class Government {
   constructor(
+    public id: ColonyIdType,
     public name: string,
-    public positions: Array<GovernmentPosition>
+    public positions: Array<GovernmentPosition>,
+    public relations?: Array<Relation> | null
   ){}
 }
 

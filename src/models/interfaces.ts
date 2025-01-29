@@ -10,10 +10,6 @@ export interface ColonyRawData {
     factionPositions: Record<string, string>[],
 }
 
-interface Position {
-    [key: string]: string;
-}
-
 export interface FactionRawData {
     id: string,
     name: string,

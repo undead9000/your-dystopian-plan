@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import { useGameStore } from './gameStore'
 import { reactive } from 'vue'
-import { ColonyRawData, FactionRawData, CharacterRawData, RelationRawData, GovernmentPosition, Character, Faction, type RelationType, type FactionIdType } from '../models'
+import { ColonyRawData, FactionRawData, CharacterRawData, RelationRawData, GovernmentPosition, Character, Faction } from '../models'
+import type { RelationType, FactionIdType, RelatedObjectType } from '../models'
 import scenarioData from "../assets/scenario.json"
 
-export const useLoopStore = defineStore('loopStore', () => {
+export const useEngineStore = defineStore('engineStore', () => {
   const gameStore = useGameStore()
 
   const factionPositionsDictionary = setupSturctureMap(scenarioData.colonyData.factionPositions)
@@ -36,6 +37,7 @@ export const useLoopStore = defineStore('loopStore', () => {
       id: colonyData.id,
       currentDate: initDate(colonyData.currentYear),
       government: assingCharactersToGovernment(colonyData.governmentStructure, colonyData.governmentName, characters),
+      relations: null
     }
   }
 
@@ -45,6 +47,7 @@ export const useLoopStore = defineStore('loopStore', () => {
 
   function setInitialGovernmentStructure(initialStructure: string[], name: string) {
     return {
+      id: 'initial colony',
       name: name,
       positions: initialStructure.map(position => ({
         positionKey: position,
@@ -170,10 +173,19 @@ export const useLoopStore = defineStore('loopStore', () => {
   }
 
   //TODO: rewrite more abstract
-  function updateRelation(update: Faction | Character, target: Faction | Character, diff: number) {
+  //TODO: rewrite for accepting array of updates
+  function updateRelation(update: RelatedObjectType, target: RelatedObjectType, diff?: number) {
     const relation = update.relations?.find(relation => relation.targetId === target.id) ?? null
 
-    if (relation) relation.value += diff
+    if (relation && diff) relation.value += diff
+  }
+
+  function updateValue(update: RelatedObjectType, property: string, value: string | number | boolean) {
+    if(update.hasOwnProperty(property)) update[property] = value
+  }
+
+  function callEvent(id: string) {
+    // TODO: must interrupt executing actions stack when reached
   }
 
   return {

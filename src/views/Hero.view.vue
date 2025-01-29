@@ -14,17 +14,17 @@
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { type FactionsRelationsType, Relation } from '../models'
-import { useGameStore, useLoopStore } from "../store/"
+import { useGameStore, useEngineStore } from "../store/"
 
 const gameStore = useGameStore()
-const loopStore = useLoopStore()
+const engineStore = useEngineStore()
 
 const { t } = useI18n()
 const factionsRelations = ref<FactionsRelationsType | null>(null) 
 const heroFactionRelations = (relations: Relation[] | null) => { return relations?.find(relation => relation.targetId === 'hero')?.value ?? 'N/A' }
 
 watch(
-    () => loopStore.state.actions.size,
+    () => engineStore.state.actions.size,
     () => factionsRelations.value = gameStore.getActiveFactionsRelations(),
     { immediate: true }
 )

@@ -7,17 +7,17 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useGameStore, useLoopStore } from "../store/"
+import { useGameStore, useEngineStore } from "../store/"
 
 const gameStore = useGameStore()
-const loopStore = useLoopStore()
+const engineStore = useEngineStore()
 const { t } = useI18n()
 
 function endTurnHandler() {
-    loopStore.isActionsStackEmpty()
-        ? loopStore.executeActions()
+    engineStore.isActionsStackEmpty()
+        ? engineStore.executeActions()
         : confirm(t('emptyActionsQueueConfirm'))
-            ? loopStore.executeActions()
+            ? engineStore.executeActions()
             : false
 }
 </script>

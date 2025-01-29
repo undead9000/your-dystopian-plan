@@ -45,12 +45,12 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
-import { useGameStore, useLoopStore } from "../../store/"
+import { useGameStore, useEngineStore } from "../../store/"
 import { daysOfWeekEnum } from '../../helpers'
 import { MonthDays } from '../../models'
 
 const gameStore = useGameStore()
-const loopStore = useLoopStore()
+const engineStore = useEngineStore()
 
 const { t } = useI18n()
 const options = { month: 'long', year: 'numeric' } as Intl.DateTimeFormatOptions
@@ -64,12 +64,12 @@ const currentMonth = computed(() => gameStore.state.colony.currentDate.toLocaleD
 const factions = computed(() => gameStore.getActiveFactions())
 
 const isActive = (day: MonthDays) => day.date.getMonth() === gameStore.state.colony.currentDate.getMonth()
-const isActionSettled = (day: MonthDays) => (loopStore.state.actions.get(day.day) && isActive(day))
+const isActionSettled = (day: MonthDays) => (engineStore.state.actions.get(day.day) && isActive(day))
 
 function onSelectDay(day: MonthDays) {
     if(!isActive(day)) return 
 
-    const selectedDayAction = loopStore.state.actions.get(day.day)
+    const selectedDayAction = engineStore.state.actions.get(day.day)
     selectedFactionId.value = selectedDayAction ? selectedDayAction.ownerId : '0'
     selectedDay.value = day
 }
@@ -77,7 +77,7 @@ function onSelectDay(day: MonthDays) {
 function onChange() {
     if(!selectedDay.value) return
 
-    loopStore.updateActionsStack(selectedFactionId.value ?? null, selectedDay.value.day)
+    engineStore.updateActionsStack(selectedFactionId.value ?? null, selectedDay.value.day)
 }
 
 watch(
