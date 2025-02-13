@@ -7,18 +7,19 @@
                     <div class="planner-selected-header">
                         <span>{{ selectedDay.day }} {{ currentMonth }}, {{ selectedDay.weekdayName }}</span>
                     </div>
-                    <select v-model="selectedFactionId" @change="onChange()" :disabled="!isActive(selectedDay)">
+
+                    <select v-for="action in MAX_ACTIONS_BY_DAY" v-model="selectedFactionIds[action - 1]" @change="onChange(selectedFactionIds[action - 1], action - 1)" :disabled="!isActive(selectedDay)">
                         <option disabled value="0">{{ t('planner.defaultOptionName') }}</option>
                         <option v-for="faction in factions" :value="faction.id">
                             {{ faction.name }} +
                         </option>
                     </select>
 
-                    <div v-if="isActionSettled(selectedDay)">
+                    <!-- <div v-if="isActionSettled(selectedDay)">
                         <div><a href="/">Repeat until end</a></div>
                         <div><a href="/">Repeat from start</a></div>
                         <div><a href="/">Set all week</a></div>
-                    </div>
+                    </div> -->
                 </div>
                 <div v-else>{{ t('planner.dayNotSelected') }}</div>
             </div>
@@ -43,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useGameStore, useEngineStore } from "../../store/"
 import { daysOfWeekEnum } from '../../helpers'
@@ -55,7 +56,11 @@ const engineStore = useEngineStore()
 const { t } = useI18n()
 const options = { month: 'long', year: 'numeric' } as Intl.DateTimeFormatOptions
 
-const selectedFactionId = ref<string | null>("0")
+const MAX_ACTIONS_BY_DAY = 3 //TODO: move const limit from view to store
+const selectedFactionIds = reactive<Array<string | null>>([])
+selectedFactionIds.length = MAX_ACTIONS_BY_DAY
+selectedFactionIds.fill("0")
+
 const selectedDay = ref<MonthDays | null>(null)
 
 const title = computed(() => gameStore.state.colony.currentDate.toLocaleDateString('en', options))
@@ -63,27 +68,29 @@ const currentMonthDays = computed(() => gameStore.getCurrentMonthDays())
 const currentMonth = computed(() => gameStore.state.colony.currentDate.toLocaleDateString('en', {month: 'long'}))
 const factions = computed(() => gameStore.getActiveFactions())
 
+
 const isActive = (day: MonthDays) => day.date.getMonth() === gameStore.state.colony.currentDate.getMonth()
 const isActionSettled = (day: MonthDays) => (engineStore.state.actions.get(day.day) && isActive(day))
 
 function onSelectDay(day: MonthDays) {
     if(!isActive(day)) return 
+    selectedFactionIds.fill("0")
 
-    const selectedDayAction = engineStore.state.actions.get(day.day)
-    selectedFactionId.value = selectedDayAction ? selectedDayAction.ownerId : '0'
+    const selectedDayActions = engineStore.state.actions.get(day.day)
+    selectedDayActions
+        ? selectedDayActions.forEach(action => {
+            selectedFactionIds[action.priority] = action.ownerId
+        })
+        : selectedFactionIds.fill("0")
+
     selectedDay.value = day
 }
 
-function onChange() {
+function onChange(selectedFactionId: string | null, priority: number) {
     if(!selectedDay.value) return
 
-    engineStore.updateActionsStack(selectedFactionId.value ?? null, selectedDay.value.day)
+    engineStore.updateActionsStack(selectedFactionId, selectedDay.value.day, priority)
 }
-
-watch(
-    () => gameStore.state.colony.currentDate,
-    () => selectedFactionId.value = null
-)
 </script>
 
 <style lang="scss">

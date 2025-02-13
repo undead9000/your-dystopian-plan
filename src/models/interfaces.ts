@@ -53,3 +53,7 @@ export interface Relation {
     targetId: FactionIdType | CharacterIdType,
     value: number
 }
+
+export interface Func {
+    (): void;
+}

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { useGameStore } from './gameStore'
 import { reactive } from 'vue'
-import { ColonyRawData, FactionRawData, CharacterRawData, RelationRawData, GovernmentPosition, Character, Faction } from '../models'
+import { ColonyRawData, FactionRawData, CharacterRawData, RelationRawData, GovernmentPosition, Character, Faction, Action } from '../models'
 import type { RelationType, FactionIdType, RelatedObjectType } from '../models'
 import scenarioData from "../assets/scenario.json"
 
@@ -155,17 +155,34 @@ export const useEngineStore = defineStore('engineStore', () => {
   //******************* Actions section *******************//
 
   function executeActions() {
-    state.actions.forEach(action => action())
+    state.actions.forEach(dailyAction => dailyAction.forEach(action => action.callback()))
     state.actions.clear()
 
     const date = new Date(gameStore.state.colony.currentDate)
     gameStore.state.colony.currentDate = new Date(date.setMonth(date.getMonth() + 1))
   }
 
-  function updateActionsStack(factionId: FactionIdType | null, currentDate: number) {
+
+  //TODO: update for non-faction - hero relations
+  function updateActionsStack(factionId: FactionIdType | null, currentDate: number, priority: number) {
     const targetFaction = gameStore.state.factions.find(faction => faction.id === factionId)
 
-    if (targetFaction) state.actions.set(currentDate, () => updateRelation(targetFaction, gameStore.state.hero, 0.01))
+    if (targetFaction && factionId) {
+      const action = new Action(0.01, priority, () => updateRelation(targetFaction, gameStore.state.hero, 0.01), factionId)
+
+      if(state.actions.get(currentDate) === undefined) {
+        state.actions.set(currentDate, [action])
+      } else {
+        const settledActions = state.actions.get(currentDate)
+        const priorityActionIndex = settledActions.findIndex(action => action.priority === priority)
+
+        priorityActionIndex !== -1 
+          ? settledActions.splice(priorityActionIndex, 1, action)
+          : settledActions.push(action)
+        
+        state.actions.set(currentDate, settledActions)
+      }
+    }
   }
 
   function isActionsStackEmpty() {

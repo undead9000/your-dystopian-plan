@@ -1,5 +1,5 @@
 import type { FactionIdType, CharacterIdType, ColonyIdType } from './types'
-import { GovernmentPosition, Relation } from './interfaces'
+import { GovernmentPosition, Relation, Func } from './interfaces'
 
 export class Game {
   colony: Colony
@@ -82,13 +82,13 @@ export class Government {
 
 //TODO: add date interval
 //TODO: batch of actions
-// export class Action {
-//   constructor(
-//     public id: string,
-//     public ownerId: FactionIdType | CharacterIdType,
-//     public type: string,
-//     public value: number,
-//     public priority: number,
-//     public callback: Function
-//   ) {}
-// }
+export class Action {
+  constructor(
+    public value: number,
+    public priority: number,
+    //public callback: Function
+    public callback: Func,
+    public ownerId?: FactionIdType | CharacterIdType,
+    public targetId?: FactionIdType | CharacterIdType,
+  ) {}
+}
