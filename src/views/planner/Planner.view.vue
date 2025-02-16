@@ -79,17 +79,17 @@ function onSelectDay(day: MonthDays) {
     const selectedDayActions = engineStore.state.actions.get(day.day)
     selectedDayActions
         ? selectedDayActions.forEach(action => {
-            selectedFactionIds[action.priority] = action.ownerId
+            selectedFactionIds[action.order] = action.ownerId
         })
         : selectedFactionIds.fill("0")
 
     selectedDay.value = day
 }
 
-function onChange(selectedFactionId: string | null, priority: number) {
+function onChange(selectedFactionId: string | null, order: number) {
     if(!selectedDay.value) return
 
-    engineStore.updateActionsStack(selectedFactionId, selectedDay.value.day, priority)
+    engineStore.updateActionsStack(selectedFactionId, selectedDay.value.day, order)
 }
 </script>
 

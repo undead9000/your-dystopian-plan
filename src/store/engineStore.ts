@@ -164,17 +164,17 @@ export const useEngineStore = defineStore('engineStore', () => {
 
 
   //TODO: update for non-faction - hero relations
-  function updateActionsStack(factionId: FactionIdType | null, currentDate: number, priority: number) {
+  function updateActionsStack(factionId: FactionIdType | null, currentDate: number, order: number) {
     const targetFaction = gameStore.state.factions.find(faction => faction.id === factionId)
 
     if (targetFaction && factionId) {
-      const action = new Action(0.01, priority, () => updateRelation(targetFaction, gameStore.state.hero, 0.01), factionId)
+      const action = new Action(0.01, order, () => updateRelation(targetFaction, gameStore.state.hero, 0.01), factionId)
 
       if(state.actions.get(currentDate) === undefined) {
         state.actions.set(currentDate, [action])
       } else {
         const settledActions = state.actions.get(currentDate)
-        const priorityActionIndex = settledActions.findIndex(action => action.priority === priority)
+        const priorityActionIndex = settledActions.findIndex(action => action.order === order)
 
         priorityActionIndex !== -1 
           ? settledActions.splice(priorityActionIndex, 1, action)

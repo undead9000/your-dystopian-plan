@@ -85,7 +85,7 @@ export class Government {
 export class Action {
   constructor(
     public value: number,
-    public priority: number,
+    public order: number,
     //public callback: Function
     public callback: Func,
     public ownerId?: FactionIdType | CharacterIdType,
