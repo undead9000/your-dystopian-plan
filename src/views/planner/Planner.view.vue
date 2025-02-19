@@ -11,7 +11,7 @@
                     <select v-for="action in MAX_ACTIONS_BY_DAY" v-model="selectedFactionIds[action - 1]" @change="onChange(selectedFactionIds[action - 1], action - 1)" :disabled="!isActive(selectedDay)">
                         <option disabled value="0">{{ t('planner.defaultOptionName') }}</option>
                         <option v-for="faction in factions" :value="faction.id">
-                            {{ faction.name }} +
+                            {{ faction.name }}
                         </option>
                     </select>
 
@@ -35,7 +35,18 @@
                     <div v-if="current" class="planner-calendar-wrapper">
                         {{ current.day }}
 
-                        <div v-if="isActionSettled(current)" class="planner-calendar-action" />
+
+                        <ul 
+                            v-if="actionsSettled(current) && isActive(current)"
+                            class="planner-calendar-actions"
+                        >
+                            <li 
+                                v-for="action in MAX_ACTIONS_BY_DAY"
+                                :class="actionsSettled(current).find(settledAction => settledAction.order === action - 1) !== undefined 
+                                    ? 'planner-calendar-action filled' 
+                                    : 'planner-calendar-action'"
+                            />
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -70,7 +81,7 @@ const factions = computed(() => gameStore.getActiveFactions())
 
 
 const isActive = (day: MonthDays) => day.date.getMonth() === gameStore.state.colony.currentDate.getMonth()
-const isActionSettled = (day: MonthDays) => (engineStore.state.actions.get(day.day) && isActive(day))
+const actionsSettled = (day: MonthDays) => engineStore.state.actions.get(day.day)
 
 function onSelectDay(day: MonthDays) {
     if(!isActive(day)) return 
@@ -133,12 +144,21 @@ function onChange(selectedFactionId: string | null, order: number) {
     padding: 8px;
     box-sizing: border-box;
 }
-.planner-calendar-action {
+.planner-calendar-actions {
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     width: 12px;
-    height: 12px;
     bottom: 8px;
     right: 8px;
-    border: 1px solid #eee;
+}
+.planner-calendar-action {
+    width: 12px;
+    height: 12px;
+
+    &.filled {
+        border: 1px solid #eee;
+    }
 }
 </style>
