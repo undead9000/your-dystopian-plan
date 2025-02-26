@@ -2,78 +2,23 @@
     <div class="planner-view">
         <h3>{{ title }}</h3>
         <div class="planner-view-container">  
-            <div class="planner-selected">
-                <div v-if="selectedDay">
-                    <div class="planner-selected-header">
-                        <span>{{ selectedDay.day }} {{ currentMonth }}, {{ selectedDay.weekdayName }}</span>
-                    </div>
-
-                    <div class="planner-manage">
-                        <div v-for="action in MAX_ACTIONS_BY_DAY" class="planner-manage-workslot">
-                            <select v-model="selectedFactions[action - 1].id" :disabled="!isActive(selectedDay)">
-                                <option disabled value="">{{ t('planner.defaultOptionName') }}</option>
-                                <option v-for="faction in factions" :value="faction.id">
-                                    {{ faction.name }}
-                                </option>
-                            </select>
-                            <select v-model.number="selectedFactions[action - 1].value" @change="onChange(action - 1)" :disabled="!selectedFactions[action - 1].id">
-                                <option disabled value="">{{ t('planner.defaultOptionDiffName') }}</option>
-                                <option value="1">+</option>
-                                <option value="-1">-</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- <div v-if="isActionSettled(selectedDay)">
-                        <div><a href="/">Repeat until end</a></div>
-                        <div><a href="/">Repeat from start</a></div>
-                        <div><a href="/">Set all week</a></div>
-                    </div> -->
-                </div>
-                <div v-else>{{ t('planner.dayNotSelected') }}</div>
-            </div>
-
-            <div v-if="currentMonthDays" class="planner-calendar">
-                <div class="planner-calendar-day" v-for="day in daysOfWeekEnum">{{ t('calendar.' + day) }}</div>
-                <div 
-                    v-for="current in currentMonthDays" 
-                    class="planner-calendar-block"
-                    :class="!isActive(current) ? 'inactive' : ''"
-                    @click="onSelectDay(current)"
-                > 
-                    <div v-if="current" class="planner-calendar-wrapper">
-                        {{ current.day }}
-
-
-                        <ul 
-                            v-if="actionsSettled(current) && isActive(current)"
-                            class="planner-calendar-actions"
-                        >
-                            <li 
-                                v-for="action in MAX_ACTIONS_BY_DAY"
-                                :class="actionsSettled(current).find(settledAction => settledAction.order === action - 1) !== undefined 
-                                    ? 'planner-calendar-action filled' 
-                                    : 'planner-calendar-action'"
-                            />
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <SelectBar :selectedDay="selectedDay" :selectedFactions="selectedFactions"/>
+            <Calendar @onSelectDay="(day: MonthDays) => onSelectDay(day)" />
         </div>    
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
-import { useI18n } from 'vue-i18n'
 import { useGameStore, useEngineStore } from "../../store/"
-import { daysOfWeekEnum } from '../../helpers'
 import { MonthDays, PlannerFactionSelect } from '../../models'
+
+import SelectBar from './components/SelectBar.component.vue'
+import Calendar from './components/Calendar.component.vue'
 
 const gameStore = useGameStore()
 const engineStore = useEngineStore()
 
-const { t } = useI18n()
 const options = { month: 'long', year: 'numeric' } as Intl.DateTimeFormatOptions
 
 const MAX_ACTIONS_BY_DAY = engineStore.state.consts.MAX_ACTIONS_BY_DAY
@@ -81,16 +26,9 @@ const selectedFactions = reactive<Array<PlannerFactionSelect>>([])
 selectedFactions.length = MAX_ACTIONS_BY_DAY
 clearSelectedFactions()
 
-const selectedDay = ref<MonthDays | null>(null)
-
-const title = computed(() => gameStore.state.colony.currentDate.toLocaleDateString('en', options))
-const currentMonthDays = computed(() => gameStore.getCurrentMonthDays())
-const currentMonth = computed(() => gameStore.state.colony.currentDate.toLocaleDateString('en', {month: 'long'}))
-const factions = computed(() => gameStore.getActiveFactions())
-
-
+const selectedDay = ref<MonthDays | undefined>(undefined)
 const isActive = (day: MonthDays) => day.date.getMonth() === gameStore.state.colony.currentDate.getMonth()
-const actionsSettled = (day: MonthDays) => engineStore.state.actions.get(day.day)
+const title = computed(() => gameStore.state.colony.currentDate.toLocaleDateString('en', options))
 
 function onSelectDay(day: MonthDays) {
     if(!isActive(day)) return 
@@ -108,12 +46,6 @@ function onSelectDay(day: MonthDays) {
         : clearSelectedFactions()
 
     selectedDay.value = day
-}
-
-function onChange(order: number) {
-    if(!selectedDay.value) return
-
-    if(selectedFactions[order].id !== '' && selectedFactions[order].value) engineStore.updateActionsStack(selectedFactions[order].id, selectedDay.value.day, order, selectedFactions[order].value)
 }
 
 function clearSelectedFactions() {
