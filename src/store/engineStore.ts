@@ -15,7 +15,10 @@ export const useEngineStore = defineStore('engineStore', () => {
   const charactersData = mapCharactersData(factionsData, scenarioData.charactersData)
 
   const state = reactive({
-    actions: new Map
+    actions: new Map,
+    consts: {
+      MAX_ACTIONS_BY_DAY: 3
+    }
   })
 
   //******************* Init section *******************//
@@ -155,7 +158,7 @@ export const useEngineStore = defineStore('engineStore', () => {
   //******************* Actions section *******************//
 
   function executeActions() {
-    state.actions.forEach(dailyAction => dailyAction.forEach(action => action.callback()))
+    state.actions.forEach(dailyAction => dailyAction.forEach(action => action.callback())) //TODO: delay execution by callback
     state.actions.clear()
 
     const date = new Date(gameStore.state.colony.currentDate)
@@ -164,11 +167,11 @@ export const useEngineStore = defineStore('engineStore', () => {
 
 
   //TODO: update for non-faction - hero relations
-  function updateActionsStack(factionId: FactionIdType | null, currentDate: number, order: number) {
+  function updateActionsStack(factionId: FactionIdType | null, currentDate: number, order: number, diff: number) {
     const targetFaction = gameStore.state.factions.find(faction => faction.id === factionId)
 
     if (targetFaction && factionId) {
-      const action = new Action(0.01, order, () => updateRelation(targetFaction, gameStore.state.hero, 0.01), factionId)
+      const action = new Action(diff, order, () => updateRelation(targetFaction, gameStore.state.hero, diff), factionId)
 
       if(state.actions.get(currentDate) === undefined) {
         state.actions.set(currentDate, [action])

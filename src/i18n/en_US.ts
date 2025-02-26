@@ -36,7 +36,8 @@ export const en_US = {
     },
     planner: {
         selectActionFor: "Select action for",
-        defaultOptionName: "Select action",
+        defaultOptionName: "Select faction",
+        defaultOptionDiffName: "Select diff",
         improveRelationships: "Improve relationships with",
         dayNotSelected: "Day is not selected"
     },

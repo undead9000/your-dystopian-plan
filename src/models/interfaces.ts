@@ -55,5 +55,10 @@ export interface Relation {
 }
 
 export interface Func {
-    (): void;
+    (): void,
+}
+
+export interface PlannerFactionSelect {
+    id: string,
+    value: number
 }

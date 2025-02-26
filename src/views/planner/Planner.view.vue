@@ -8,12 +8,21 @@
                         <span>{{ selectedDay.day }} {{ currentMonth }}, {{ selectedDay.weekdayName }}</span>
                     </div>
 
-                    <select v-for="action in MAX_ACTIONS_BY_DAY" v-model="selectedFactionIds[action - 1]" @change="onChange(selectedFactionIds[action - 1], action - 1)" :disabled="!isActive(selectedDay)">
-                        <option disabled value="0">{{ t('planner.defaultOptionName') }}</option>
-                        <option v-for="faction in factions" :value="faction.id">
-                            {{ faction.name }}
-                        </option>
-                    </select>
+                    <div class="planner-manage">
+                        <div v-for="action in MAX_ACTIONS_BY_DAY" class="planner-manage-workslot">
+                            <select v-model="selectedFactions[action - 1].id" :disabled="!isActive(selectedDay)">
+                                <option disabled value="">{{ t('planner.defaultOptionName') }}</option>
+                                <option v-for="faction in factions" :value="faction.id">
+                                    {{ faction.name }}
+                                </option>
+                            </select>
+                            <select v-model.number="selectedFactions[action - 1].value" @change="onChange(action - 1)" :disabled="!selectedFactions[action - 1].id">
+                                <option disabled value="">{{ t('planner.defaultOptionDiffName') }}</option>
+                                <option value="1">+</option>
+                                <option value="-1">-</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <!-- <div v-if="isActionSettled(selectedDay)">
                         <div><a href="/">Repeat until end</a></div>
@@ -59,7 +68,7 @@ import { ref, reactive, computed } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useGameStore, useEngineStore } from "../../store/"
 import { daysOfWeekEnum } from '../../helpers'
-import { MonthDays } from '../../models'
+import { MonthDays, PlannerFactionSelect } from '../../models'
 
 const gameStore = useGameStore()
 const engineStore = useEngineStore()
@@ -67,10 +76,10 @@ const engineStore = useEngineStore()
 const { t } = useI18n()
 const options = { month: 'long', year: 'numeric' } as Intl.DateTimeFormatOptions
 
-const MAX_ACTIONS_BY_DAY = 3 //TODO: move const limit from view to store
-const selectedFactionIds = reactive<Array<string | null>>([])
-selectedFactionIds.length = MAX_ACTIONS_BY_DAY
-selectedFactionIds.fill("0")
+const MAX_ACTIONS_BY_DAY = engineStore.state.consts.MAX_ACTIONS_BY_DAY
+const selectedFactions = reactive<Array<PlannerFactionSelect>>([])
+selectedFactions.length = MAX_ACTIONS_BY_DAY
+clearSelectedFactions()
 
 const selectedDay = ref<MonthDays | null>(null)
 
@@ -85,22 +94,35 @@ const actionsSettled = (day: MonthDays) => engineStore.state.actions.get(day.day
 
 function onSelectDay(day: MonthDays) {
     if(!isActive(day)) return 
-    selectedFactionIds.fill("0")
+    clearSelectedFactions()
 
     const selectedDayActions = engineStore.state.actions.get(day.day)
+
     selectedDayActions
         ? selectedDayActions.forEach(action => {
-            selectedFactionIds[action.order] = action.ownerId
+            selectedFactions[action.order] = {
+                id: action.ownerId,
+                value: action.value
+            } 
         })
-        : selectedFactionIds.fill("0")
+        : clearSelectedFactions()
 
     selectedDay.value = day
 }
 
-function onChange(selectedFactionId: string | null, order: number) {
+function onChange(order: number) {
     if(!selectedDay.value) return
 
-    engineStore.updateActionsStack(selectedFactionId, selectedDay.value.day, order)
+    if(selectedFactions[order].id !== '' && selectedFactions[order].value) engineStore.updateActionsStack(selectedFactions[order].id, selectedDay.value.day, order, selectedFactions[order].value)
+}
+
+function clearSelectedFactions() {
+    for (let i = 0; i < MAX_ACTIONS_BY_DAY; i++) {
+        selectedFactions[i] = {
+            id: '',
+            value: 0
+        }
+    }
 }
 </script>
 
@@ -112,7 +134,7 @@ function onChange(selectedFactionId: string | null, order: number) {
 }
 .planner-selected {
     min-height: 240px;
-    width: 20%;
+    width: 40%;
     border: 1px solid #eee;
     padding: 16px;
     box-sizing: border-box;
@@ -156,9 +178,12 @@ function onChange(selectedFactionId: string | null, order: number) {
 .planner-calendar-action {
     width: 12px;
     height: 12px;
+    border-color: #eee;
+    border-width: 1px;
+    border-style: dashed;
 
     &.filled {
-        border: 1px solid #eee;
+        border-style: solid;
     }
 }
 </style>
