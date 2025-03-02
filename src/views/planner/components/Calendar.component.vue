@@ -16,7 +16,7 @@
                 >
                     <li 
                         v-for="action in MAX_ACTIONS_BY_DAY"
-                        :class="actionsSettled(current).find(settledAction => settledAction.order === action - 1) !== undefined 
+                        :class="actionsSettled(current).find((settledAction: Action) => settledAction.order === action - 1) !== undefined 
                             ? 'planner-calendar-action filled' 
                             : 'planner-calendar-action'"
                     />
@@ -29,9 +29,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n'
-import { daysOfWeekEnum } from '../../../helpers'
-import { useGameStore, useEngineStore } from "../../../store/"
-import { MonthDays } from '../../../models'
+import { daysOfWeekEnum } from '@/helpers'
+import { useGameStore, useEngineStore } from "@/store/"
+import { MonthDays, Action } from '@/models'
 
 const emit = defineEmits(['onSelectDay'])
 

@@ -10,8 +10,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
-import { useGameStore, useEngineStore } from "../../store/"
-import { MonthDays, PlannerFactionSelect } from '../../models'
+import { useGameStore, useEngineStore } from "@/store/"
+import { MonthDays, PlannerFactionSelect, Action } from '@/models'
 
 import SelectBar from './components/SelectBar.component.vue'
 import Calendar from './components/Calendar.component.vue'
@@ -37,9 +37,9 @@ function onSelectDay(day: MonthDays) {
     const selectedDayActions = engineStore.state.actions.get(day.day)
 
     selectedDayActions
-        ? selectedDayActions.forEach(action => {
+        ? selectedDayActions.forEach((action: Action) => {
             selectedFactions[action.order] = {
-                id: action.ownerId,
+                id: action.ownerId ?? '0',
                 value: action.value
             } 
         })

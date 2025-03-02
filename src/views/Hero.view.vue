@@ -13,8 +13,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
-import { type FactionsRelationsType, Relation } from '../models'
-import { useGameStore, useEngineStore } from "../store/"
+import { type FactionsRelationsType, Relation } from '@/models'
+import { useGameStore, useEngineStore } from "@/store/"
 
 const gameStore = useGameStore()
 const engineStore = useEngineStore()

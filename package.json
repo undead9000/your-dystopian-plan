@@ -60,7 +60,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
     "concurrently": "^7.2.2",
-    "electron": "^34.0.0",
+    "electron": "^34.3.0",
     "electron-builder": "^25.1.8",
     "pinia": "^2.0.18",
     "sass": "^1.81.1",

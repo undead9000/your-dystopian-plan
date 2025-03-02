@@ -6,6 +6,7 @@
     "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
+    "jsxImportSource": "vue",
     "sourceMap": true,
     "resolveJsonModule": true,
     "isolatedModules": false,
@@ -13,9 +14,16 @@
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
     "outDir": "dist/electron",
-    "allowJs": true
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+		"paths": {
+			"@/*": ["./src/*"]
+		}
   },
-  "include": ["src/electron/**/*"],
+  "include": [
+    "src/electron/**/*",
+    "src/**/*.vue",
+  ],
   "references": [{
     "path": "./tsconfig.node.json"
   }]

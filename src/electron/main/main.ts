@@ -5,6 +5,7 @@ import {
 } from 'electron';
 
 const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
+//process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 function createWindow() {
     // Create the browser window.

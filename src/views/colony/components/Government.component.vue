@@ -4,14 +4,14 @@
         <p>
             <span>{{ t('government.name') }}: </span> <span>{{ government.name }}</span>
         </p>
-        <p>
+        <div>
             <span>{{ t('government.positions') }}: </span> 
             <ul class="government-positions">
                 <li v-for="official in government.positions">
                     {{ official.positionName }}: {{ official.responsibleId ? responsibleCharacter(official.responsibleId) : t('notAssigned') }}
                 </li>
             </ul>
-        </p>
+        </div>
     </template>
     <p v-else>{{ t('noGovernment') }}</p>
 </template>
@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n'
-import { useGameStore } from "../../../store/"
+import { useGameStore } from "@/store/"
 
 const gameStore = useGameStore()
 const { t } = useI18n()

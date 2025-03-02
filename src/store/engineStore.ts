@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { useGameStore } from './gameStore'
 import { reactive } from 'vue'
-import { ColonyRawData, FactionRawData, CharacterRawData, RelationRawData, GovernmentPosition, Character, Faction, Action } from '../models'
-import type { RelationType, FactionIdType, RelatedObjectType } from '../models'
+import { ColonyRawData, FactionRawData, CharacterRawData, RelationRawData, GovernmentPosition, Character, Faction, Action } from '@/models'
+import type { RelationType, FactionIdType, RelatedObjectType } from '@/models'
 import scenarioData from "../assets/scenario.json"
 
 export const useEngineStore = defineStore('engineStore', () => {
@@ -158,7 +158,7 @@ export const useEngineStore = defineStore('engineStore', () => {
   //******************* Actions section *******************//
 
   function executeActions() {
-    state.actions.forEach(dailyAction => dailyAction.forEach(action => action.callback())) //TODO: delay execution by callback
+    state.actions.forEach(dailyAction => dailyAction.forEach((action: Action) => action.callback())) //TODO: delay execution by callback
     state.actions.clear()
 
     const date = new Date(gameStore.state.colony.currentDate)
@@ -177,7 +177,7 @@ export const useEngineStore = defineStore('engineStore', () => {
         state.actions.set(currentDate, [action])
       } else {
         const settledActions = state.actions.get(currentDate)
-        const priorityActionIndex = settledActions.findIndex(action => action.order === order)
+        const priorityActionIndex = settledActions.findIndex((action: Action) => action.order === order)
 
         priorityActionIndex !== -1 
           ? settledActions.splice(priorityActionIndex, 1, action)
@@ -201,7 +201,7 @@ export const useEngineStore = defineStore('engineStore', () => {
   }
 
   function updateValue(update: RelatedObjectType, property: string, value: string | number | boolean) {
-    if(update.hasOwnProperty(property)) update[property] = value
+    //if(update.hasOwnProperty(property)) update[property] = value
   }
 
   function callEvent(id: string) {

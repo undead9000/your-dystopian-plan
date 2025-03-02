@@ -33,8 +33,8 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useI18n } from 'vue-i18n'
-import { useGameStore } from "../../../store/"
-import { Faction, Character } from '../../../models/models'
+import { useGameStore } from "@/store/"
+import { Faction, Character } from '@/models/'
 
 const gameStore = useGameStore()
 const { t } = useI18n()
