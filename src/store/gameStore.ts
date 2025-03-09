@@ -36,7 +36,7 @@ export const useGameStore = defineStore('gameStore', () => {
   function getActiveFactions() {
     if(!state.factions) return null
 
-    return state.factions.filter(item => item.active)
+    return toRaw(state.factions).filter(item => item.active)
   }
 
   function getActiveFactionsRelations(): FactionsRelationsType | null {

@@ -188,6 +188,12 @@ export const useEngineStore = defineStore('engineStore', () => {
     }
   }
 
+  function removeActionFromStack(currentDate: number, order: number) {
+    const settledActions = state.actions.get(currentDate)
+    const deletingActionIndex = settledActions.findIndex((action: Action) => action.order === order)
+    if(deletingActionIndex !== -1) settledActions.splice(deletingActionIndex, 1)
+  }
+
   function isActionsStackEmpty() {
     return !!state.actions.size
   }
@@ -213,6 +219,7 @@ export const useEngineStore = defineStore('engineStore', () => {
     initializeGameStore,
     executeActions,
     updateActionsStack,
+    removeActionFromStack,
     isActionsStackEmpty
   }
 })

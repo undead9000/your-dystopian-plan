@@ -2,7 +2,7 @@
     <div class="planner-view">
         <h3>{{ title }}</h3>
         <div class="planner-view-container">  
-            <SelectBar :selectedDay="selectedDay" :selectedFactions="selectedFactions"/>
+            <SelectBar :selectedDay="selectedDay" :selectedOptions="selectedFactions"/>
             <Calendar @onSelectDay="(day: MonthDays) => onSelectDay(day)" />
         </div>    
     </div>
@@ -106,16 +106,17 @@ function clearSelectedFactions() {
     width: 12px;
     bottom: 8px;
     right: 8px;
-}
-.planner-calendar-action {
-    width: 12px;
-    height: 12px;
-    border-color: #eee;
-    border-width: 1px;
-    border-style: dashed;
 
-    &.filled {
-        border-style: solid;
+    li {
+        width: 12px;
+        height: 12px;
+        border-color: #eee;
+        border-width: 1px;
+        border-style: dashed;
+
+        &.filled {
+            border-style: solid;
+        }
     }
 }
 </style>

@@ -9,17 +9,8 @@
         > 
             <div v-if="current" class="planner-calendar-wrapper">
                 {{ current.day }}
-
-                <ul 
-                    v-if="actionsSettled(current) && isActive(current)"
-                    class="planner-calendar-actions"
-                >
-                    <li 
-                        v-for="action in MAX_ACTIONS_BY_DAY"
-                        :class="actionsSettled(current).find((settledAction: Action) => settledAction.order === action - 1) !== undefined 
-                            ? 'planner-calendar-action filled' 
-                            : 'planner-calendar-action'"
-                    />
+                <ul v-if="actionsSettled(current) && isActive(current)" class="planner-calendar-actions">
+                    <li v-for="iterator in MAX_ACTIONS_BY_DAY" :class="isActionSettledSlot(current, iterator) ? 'filled' : ''" />
                 </ul>
             </div>
         </div>
@@ -44,4 +35,5 @@ const currentMonthDays = computed(() => gameStore.getCurrentMonthDays())
 
 const isActive = (day: MonthDays) => day.date.getMonth() === gameStore.state.colony.currentDate.getMonth()
 const actionsSettled = (day: MonthDays) => engineStore.state.actions.get(day.day)
+const isActionSettledSlot = (day: MonthDays, iterator: number) => actionsSettled(day).find((settledAction: Action) => settledAction.order === iterator - 1) !== undefined 
 </script>
