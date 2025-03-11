@@ -17,10 +17,11 @@
                         </option>
                     </select>
                     <select v-model="selectedOptions[iterator - 1].value" @change="onChange(iterator - 1)" :disabled="!selectedOptions[iterator - 1].id">
-                        <option v-for="option in getActionsOptions(iterator)" :value="option.value">
+                        <option v-for="option in getActionsOptions()" :value="option.value">
                             {{ option.label }}
                         </option>
                     </select>
+                    <button v-if="isActionsRemovable(iterator)" @click="removeAction(iterator - 1)">x</button>
                 </div>
             </div>
 
@@ -51,11 +52,6 @@ const props = defineProps({
     }
 })
 
-type selectBarOptionType = {
-    value: number;
-    label: number | string;
-}
-
 const { t } = useI18n()
 
 const engineStore = useEngineStore()
@@ -68,6 +64,7 @@ const isActive = (day: MonthDays) => day.date.getMonth() === gameStore.state.col
 
 const actionsSettled = (day: MonthDays) => engineStore.state.actions.get(day.day)
 const isActionSettledSlot = (day: MonthDays, iterator: number) => actionsSettled(day).find((settledAction: Action) => settledAction.order === iterator - 1) !== undefined 
+const isActionsRemovable = (iterator: number) => props.selectedDay && actionsSettled(props.selectedDay) && isActionSettledSlot(props.selectedDay, iterator)
 
 function getFactionsOptions() {
     const defaultOption = [{value: '', label: t('planner.defaultOptionName')}]
@@ -78,32 +75,37 @@ function getFactionsOptions() {
         : defaultOption
 }
 
-function getActionsOptions(index: number) {
-    const defaultOptions = [
+function getActionsOptions() {
+    return [
         {value: 0, label: t('planner.defaultOptionDiffName')},
         {value: 1, label: '+'},
         {value: -1, label: '-'},
-    ] as selectBarOptionType[]
+    ]
 
-    const result = props.selectedDay && actionsSettled(props.selectedDay) && isActionSettledSlot(props.selectedDay, index)
-        ? defaultOptions.concat([{ value: 'free', label: 'Free' } as unknown as selectBarOptionType])
-        : defaultOptions
+}
+//TODO: update select options after removing
+function removeAction(order: number) {
+    if(!props.selectedDay) return
 
-    return result
+    engineStore.removeActionFromStack(props.selectedDay.day, order)
 }
 
 
 function onChange(order: number) {
     if(!props.selectedDay) return
 
-    if(typeof props.selectedOptions[order].value === 'number') {
-        if(props.selectedOptions[order].id !== '' && props.selectedOptions[order].value) {
-            engineStore.updateActionsStack(props.selectedOptions[order].id, props.selectedDay.day, order, props.selectedOptions[order].value)
-        } 
-    }   
-
-    if(typeof props.selectedOptions[order].value === 'string') {
-        engineStore.removeActionFromStack(props.selectedDay.day, order)
-    }
+    if(props.selectedOptions[order].id !== '' && props.selectedOptions[order].value) {
+        engineStore.updateActionsStack(props.selectedOptions[order].id, props.selectedDay.day, order, props.selectedOptions[order].value)
+    } 
+     
 }
 </script>
+
+<style lang="scss">
+.planner-manage-workslot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 20px;
+}
+</style>

@@ -60,5 +60,5 @@ export interface Func {
 
 export interface PlannerFactionSelect {
     id: string,
-    value: number | string
+    value: number
 }
